@@ -10,6 +10,8 @@ PREFACE
   The aim is to build a reasonably fast VM which is easy to analyse and extend. 
   I'm not a hardcore C hacker at all, so I really need this software to be understandable by mere mortals.
   I want to keep maximum of VM features in Io itself. Like builtin bytecode sequences and optimization filters.
+  New VM should be optimized for the metaprogramming techniques which make Io outstanding. Source code should still
+  be runtime inspectable and modifiable, arguments should be lazy.
 
   iovm2 is not about rewriting core library and does not change syntax.
   I try to reuse current parser, libcoroutine, libgarbagecollector and libbasekit. 
