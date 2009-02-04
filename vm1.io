@@ -12,11 +12,11 @@ VM1 := Object clone do(
   )
   
   processMessageChain := method(
-    if (message isNil,
-      return
-    ) elseif (message cachedResult,
-      receiver = message cachedResult
-      message = message next
+    while(message isNil not, 
+      if (message cachedResult,
+        receiver = message cachedResult
+        message = message next
+      )
     )
   )
   
@@ -33,12 +33,13 @@ if(isLaunchScript,
   
   Cases := Verificator clone do(
     helloWorld := method(
-      setMessage(message("Hello, world!"))
+      setMessage(message("Hello, world!" 42))
       setLocals(Object clone)
       setReceiver(Object clone)
       run
       verify(message == nil)
     )
+    
   )
   
   vm := VM1 clone
