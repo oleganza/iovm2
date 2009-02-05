@@ -2,7 +2,7 @@
 
 VM1 := Object clone do(
   
-  message  ::= nil 
+  message  ::= nil
   locals   ::= nil
   receiver ::= nil
   
@@ -21,8 +21,8 @@ VM1 := Object clone do(
   )
   
 ) 
- 
- 
+
+
 if(isLaunchScript,
   
   Verificator := Object clone do(
