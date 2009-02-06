@@ -7,3 +7,8 @@ code := message(
     i = i + Answer
   )
 )
+
+Lobby println
+Protos println
+
+getSlot("code") println
