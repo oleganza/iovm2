@@ -14,7 +14,7 @@ PREFACE
   be runtime inspectable and modifiable, arguments should be lazy.
 
   iovm2 is not about rewriting core library and does not change syntax.
-  I try to reuse current parser, libcoroutine, libgarbagecollector and libbasekit. 
+  I try to reuse current parser, libcoroutine (?), libgarbagecollector and libbasekit. 
 
   I've never written any programming language, but I like Io very much, so I'd like 
   to use it in projects where performance matters. 
@@ -26,8 +26,8 @@ DRAFT OVERVIEW
   2. vm1 records call statistics for every message
   3. when particular message evaluation is considered as a hotspot, vm1 starts
      recording a bytecode stream
-  4. where bytecode stream is available, vm1 drops execution to vm2 interpretor
-  5. interpretor walks bytecode stream and applies optimizing filters
+  4. where bytecode stream is available, vm1 drops execution to vm2 interpreter
+  5. interpreter walks bytecode stream and applies optimizing filters
   6. each filter is built in such way that it passes bytecode through without 
      changes when it is not properly optimized by a previous filter.
      This allows to avoid blocking execution flow by aggressive stop-the-world 
@@ -47,7 +47,7 @@ DRAFT OVERVIEW
 
 TODO
 
-- state of vm2 interpretor: registers and the stack (pretty much the same as vm1's).
+- state of vm2 interpreter: registers and the stack (pretty much the same as vm1's).
 - primitive bytecode sequences (slot lookup, message perform, if, while, loop, return, break, continue, clone, arithmetics).
 - inlining heuristics: when to start bytecode recording, when to stop bytecode recording.
 - inline cache invalidation techniques: valid marker, complete guards, callbacks for invalidating callsites.
