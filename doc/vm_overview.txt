@@ -1,0 +1,36 @@
+
+1. interpreter loads and parses the code, creates message tree
+2. interpreter walks through the message tree, emits and immediately interprets bytecode
+3. interpreter counts number of calls at each message
+4. interpreter collects statistics at control points: method lookup, conditional expression.
+   statistics are stored in a hash table with an upper boundary. 
+5. when statistics show up leading value(s) (e.g. method A was called 95 times, method B - 5)
+   interpreter appends guard with a test for such leading value to the bytecode and bytecode
+   of the next message.
+6. First time bytecode is enlarged (trace is constructed), it is passed to the cyclic chain of optimizing filters.
+7. Each time bytecode is executed, only one step in the filter chain is passed. 
+8. After each whole filter cycle, bytecode digest is computed.
+9. If the digest does not change (code is optimized), filters are switched off until trace is enlarged.
+10. When optimization is finished, native code compiler is invoked for the resulting bytecode.
+
+   Example:
+     first pass - create bytecode
+     N     pass - append next message bytecode (create a trace)
+     N + 1 pass - pass to the filter F1
+     N + 2 pass - pass to the filter F2
+     N + 3 pass - pass to the filter F3
+                  compute the digest
+     N + 4 pass - pass to the filter F1
+     N + 5 pass - pass to the filter F2
+     N + 6 pass - pass to the filter F3
+                  compute the digest
+                  if not changed - switch off the filters, 
+                                   run native code compiler.
+
+Note: digest computation and NCC invocation could be implemented as another filter.
+
+11. If situation is changed and some branch drops below the threshold,
+    its branch is dropped off to free up the memory.
+12. TODO: deal with polymorphic branches (http://andreasgal.com/2008/02/28/tree-folding/)
+    
+  
