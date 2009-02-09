@@ -1,0 +1,783 @@
+
+$ ruby-prof -p graph meta/benchmarks/skiplist_volume.rb > profile.txt
+
+                                                                  user     system      total        real
+Inserting 1000 pairs [Ruby]                                   2.750000   2.300000   5.050000 (  5.593212)
+Reading 1000 pairs [Ruby]                                     1.330000   1.080000   2.410000 (  2.468819)
+Dumping 10 items [Ruby]                                       0.430000   0.330000   0.760000 (  0.786741)
+                                                                  user     system      total        real
+Inserting 1000 pairs [C]                                      0.650000   0.570000   1.220000 (  1.643422)
+Reading 1000 pairs [C]                                        0.060000   0.050000   0.110000 (  0.102233)
+Dumping 10 items [C]                                          0.420000   0.310000   0.730000 (  0.774792)
+
+
+
+Thread ID: 109440
+Total Time: 10.869754
+
+  %total   %self     total      self      wait     child            calls   Name
+--------------------------------------------------------------------------------
+ 100.00%   0.00%     10.87      0.00      0.00     10.87                1     Global#[No method]
+                     10.87      0.00      0.00     10.87              1/1     Kernel#load
+--------------------------------------------------------------------------------
+                     10.87      0.00      0.00     10.87              1/1     Global#[No method]
+ 100.00%   0.00%     10.87      0.00      0.00     10.87                1     Kernel#load
+                      0.00      0.00      0.00      0.00              2/2     <Object::Object>#include
+                      0.00      0.00      0.00      0.00           1/1138     Module#method_added
+                     10.50      0.00      0.00     10.50              2/2     Object#benchmark!
+                      0.00      0.00      0.00      0.00             2/70     String#+
+                      0.00      0.00      0.00      0.00            2/163     <Class::File>#dirname
+                      0.05      0.00      0.00      0.05              1/1     StrokeDB::ClassOptimization::ClassMethods#optimize!
+                      0.00      0.00      0.00      0.00             1/14     Array#unshift
+                      0.32      0.00      0.00      0.32              2/6     Kernel#require
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00             3/45     Enumerable#each_with_index
+                      0.00      0.00      0.00      0.00             1/45     <Module::JSON>#generator=
+                      0.00      0.00      0.00      0.00             3/45     Enumerable#all?
+                     10.50      0.00      0.00     10.50             2/45     Object#benchmark!
+                      0.18      0.00      0.00      0.18             8/45     Enumerable#find
+                      0.00      0.00      0.00      0.00             1/45     StrokeDB::ClassOptimization::ClassMethods#optimize!
+                      0.00      0.00      0.00      0.00             9/45     Inline::C#parse_signature
+                      0.00      0.00      0.00      0.00             8/45     Enumerable#sort_by
+                      0.00      0.00      0.00      0.00             2/45     Kernel#gem_original_require-1
+                      0.02      0.00      0.00      0.02             1/45     Gem::GemPathSearcher#initialize
+                      0.00      0.00      0.00      0.00             4/45     Inline::C#module_name
+                      0.00      0.00      0.00      0.00             3/45     <Module::Gem>#activate
+  98.58%   0.08%     10.72      0.01      0.00     10.71               45     Array#each
+                      0.00      0.00      0.00      0.00            10/16     Array#push
+                      0.00      0.00      0.00      0.00           18/383     String#to_s
+                      0.00      0.00      0.00      0.00            10/68     String#gsub
+                     10.50      0.00      0.00     10.50              2/2     Benchmark#bm
+                      0.00      0.00      0.00      0.00            10/14     String#strip
+                      0.00      0.00      0.00      0.00             4/18     Module#alias_method
+                      0.18      0.01      0.00      0.17          821/821     Gem::GemPathSearcher#matching_file?
+                      0.02      0.00      0.00      0.01          144/144     Gem::GemPathSearcher#lib_dirs_for
+                      0.00      0.00      0.00      0.00            56/56     Module#undef_method
+                      0.00      0.00      0.00      0.00              9/9     <Module::JSON>#deep_const_get
+                      0.00      0.00      0.00      0.00              1/1     <Module::Gem>#activate-1
+                      0.00      0.00      0.00      0.00              3/4     Gem::Requirement#satisfy?
+                      0.00      0.00      0.00      0.00          144/259     Hash#[]=
+                      0.00      0.00      0.00      0.00             9/29     Module#module_eval
+                      0.00      0.00      0.00      0.00          106/132     Kernel#instance_variables
+                      0.00      0.00      0.00      0.00            10/28     Symbol#to_s
+                      0.00      0.00      0.00      0.00             9/23     Module#const_get
+                      0.00      0.00      0.00      0.00          106/139     Array#include?
+                      0.00      0.00      0.00      0.00              3/4     Gem::Specification#sort_obj
+                      0.00      0.00      0.00      0.00              9/9     Digest::Base#<<
+                      0.00      0.00      0.00      0.00          144/965     Kernel#object_id
+                      0.00      0.00      0.00      0.00              9/9     Module#class_eval
+                      0.00      0.00      0.00      0.00            25/25     String#length
+--------------------------------------------------------------------------------
+                     10.50      0.00      0.00     10.50              2/2     Kernel#load
+  96.63%   0.00%     10.50      0.00      0.00     10.50                2     Object#benchmark!
+                     10.50      0.00      0.00     10.50             2/45     Array#each
+--------------------------------------------------------------------------------
+                     10.50      0.00      0.00     10.50              2/2     Array#each
+  96.63%   0.00%     10.50      0.00      0.00     10.50                2     Benchmark#bm
+                      0.00      0.00      0.00      0.00             2/70     String#+
+                      0.00      0.00      0.00      0.00              2/3     String#*
+                     10.50      0.00      0.00     10.50              2/2     Benchmark#benchmark
+--------------------------------------------------------------------------------
+                     10.50      0.00      0.00     10.50              2/2     Benchmark#bm
+  96.63%   0.00%     10.50      0.00      0.00     10.50                2     Benchmark#benchmark
+                      0.00      0.00      0.00      0.00              2/2     IO#sync
+                      0.00      0.00      0.00      0.00           4/2155     Class#new
+                      0.15      0.00      0.00      0.15              2/2     StrokeDB::SkiplistVolume#close!
+                      0.00      0.00      0.00      0.00             4/50     IO#sync=
+                      0.06      0.03      0.00      0.03              2/6     Integer#times
+                      0.00      0.00      0.00      0.00              2/8     Fixnum#*
+                      0.00      0.00      0.00      0.00             2/99     Module#===
+                      0.00      0.00      0.00      0.00              2/2     <Module::FileUtils>#rm_rf
+                      0.00      0.00      0.00      0.00             2/14     Kernel#print
+                      0.00      0.00      0.00      0.00           6/4019     Fixnum#to_s
+                     10.30      0.00      0.00     10.30              6/6     Benchmark::Report#report
+                      0.00      0.00      0.00      0.00              2/5     Fixnum#/
+                      0.00      0.00      0.00      0.00              2/2     Kernel#iterator?
+--------------------------------------------------------------------------------
+                     10.30      0.00      0.00     10.30              6/6     Benchmark#benchmark
+  94.72%   0.00%     10.30      0.00      0.00     10.30                6     Benchmark::Report#report
+                      0.00      0.00      0.00      0.00              6/6     Benchmark::Tms#format
+                     10.29      0.00      0.00     10.29              6/6     <Module::Benchmark>#measure
+                      0.00      0.00      0.00      0.00            12/14     Kernel#print
+                      0.00      0.00      0.00      0.00           6/4006     String#ljust
+--------------------------------------------------------------------------------
+                     10.29      0.00      0.00     10.29              6/6     Benchmark::Report#report
+  94.70%   0.01%     10.29      0.00      0.00     10.29                6     <Module::Benchmark>#measure
+                      0.00      0.00      0.00      0.00           6/2155     Class#new
+                      0.00      0.00      0.00      0.00            12/12     Struct::Tms#cutime
+                      1.50      0.00      0.00      1.50              2/6     Integer#times
+                      0.00      0.00      0.00      0.00            30/30     Float#-
+                      0.00      0.00      0.00      0.00            12/12     <Module::Benchmark>#times
+                      0.00      0.00      0.00      0.00            12/12     Struct::Tms#utime
+                      0.00      0.00      0.00      0.00            12/12     Time#to_f
+                      0.00      0.00      0.00      0.00            12/12     Struct::Tms#stime
+                      0.00      0.00      0.00      0.00            12/12     Struct::Tms#cstime
+                      8.79      0.05      0.00      8.74             4/36     Array#each-1
+                      0.00      0.00      0.00      0.00              2/5     Fixnum#/
+                      0.00      0.00      0.00      0.00            12/12     <Class::Time>#now
+--------------------------------------------------------------------------------
+                      8.79      0.05      0.00      8.74             4/36     <Module::Benchmark>#measure
+                      0.00      0.00      0.00      0.00             1/36     Enumerable#each_with_index
+                      0.00      0.00      0.00      0.00             1/36     Enumerable#all?
+                      0.00      0.00      0.00      0.00             9/36     Enumerable#inject
+                      0.00      0.00      0.00      0.00             1/36     <Module::Gem>#activate-1
+                      0.00      0.00      0.00      0.00             2/36     <Module::FileUtils>#rm_r
+                      0.00      0.00      0.00      0.00             1/36     Enumerable#sort_by
+                      0.00      0.00      0.00      0.00             6/36     <Module::FileUtils>#fu_check_options
+                      0.00      0.00      0.00      0.00             2/36     <Module::FileUtils>#mkdir_p
+                      0.00      0.00      0.00      0.00             9/36     Module#class_eval
+  80.96%   0.49%      8.80      0.05      0.00      8.75               36     Array#each-1
+                      2.50      0.01      0.00      2.49        2000/2000     StrokeDB::SkiplistVolume#find
+                      0.00      0.00      0.00      0.00          326/383     String#to_s
+                      0.00      0.00      0.00      0.00             9/11     Module#const_defined?
+                      6.22      0.08      0.00      6.14        2000/2000     StrokeDB::SkiplistVolume#insert
+                      0.02      0.02      0.00      0.00      6000/328127     Array#[]
+                      0.00      0.00      0.00      0.00              2/2     <Class::SystemCallError>#===
+                      0.00      0.00      0.00      0.00            6/998     Hash#[]
+                      0.00      0.00      0.00      0.00              1/4     Gem::Requirement#satisfy?
+                      0.00      0.00      0.00      0.00              2/2     <Module::FileUtils>#remove_entry
+                      0.00      0.00      0.00      0.00            20/22     Hash#delete
+                      0.00      0.00      0.00      0.00           26/132     Kernel#instance_variables
+                      0.00      0.00      0.00      0.00            2/156     <Class::File>#directory?
+                      0.00      0.00      0.00      0.00             9/23     Module#const_get
+                      0.00      0.00      0.00      0.00           26/139     Array#include?
+                      0.00      0.00      0.00      0.00              1/4     Gem::Specification#sort_obj
+                      0.00      0.00      0.00      0.00          326/543     String#==
+                      0.00      0.00      0.00      0.00             9/18     String#empty?
+                      0.00      0.00      0.00      0.00              2/2     <Module::FileUtils>#fu_mkdir
+--------------------------------------------------------------------------------
+                      6.22      0.08      0.00      6.14        2000/2000     Array#each-1
+  57.27%   0.74%      6.22      0.08      0.00      6.14             2000     StrokeDB::SkiplistVolume#insert
+                      0.01      0.01      0.00      0.00       2000/75137     Fixnum#>
+                      5.39      0.04      0.00      5.36        2000/2000     StrokeDB::Skiplist#insert
+                      0.74      0.22      0.00      0.52        2000/2000     StrokeDB::SkiplistVolume#write_log
+--------------------------------------------------------------------------------
+                      5.39      0.04      0.00      5.36        2000/2000     StrokeDB::SkiplistVolume#insert
+  49.63%   0.36%      5.39      0.04      0.00      5.36             2000     StrokeDB::Skiplist#insert
+                      5.36      0.28      0.00      5.08        2000/2008     Mutex#synchronize
+--------------------------------------------------------------------------------
+                      0.04      0.00      0.00      0.04           8/2008     <Module::Gem>#searcher
+                      5.36      0.28      0.00      5.08        2000/2008     StrokeDB::Skiplist#insert
+  49.60%   2.56%      5.39      0.28      0.00      5.11             2008     Mutex#synchronize
+                      0.02      0.02      0.00      0.00       5128/75137     Fixnum#>
+                      0.01      0.01      0.00      0.00       3128/67128     Fixnum#-
+                      0.16      0.11      0.00      0.05        2000/2000     StrokeDB::Skiplist#random_level
+                      0.09      0.03      0.00      0.06        2001/2155     Class#new
+                      0.36      0.18      0.00      0.17        3128/3128     StrokeDB::Skiplist#node_insert_after!
+                      4.15      1.41      0.00      2.74        2000/2000     StrokeDB::Skiplist#find_with_update
+                      0.14      0.08      0.00      0.07       2000/89360     StrokeDB::Skiplist#node_compare
+                      0.06      0.04      0.00      0.03        2000/2004     StrokeDB::Skiplist#new_node
+                      0.01      0.01      0.00      0.00        2000/4022     Fixnum#==
+                      0.01      0.01      0.00      0.00      3128/328127     Array#[]
+                      0.06      0.04      0.00      0.02        2000/4000     StrokeDB::Skiplist#node_level
+                      0.03      0.03      0.00      0.00        2000/3022     StrokeDB::Skiplist#anchor
+--------------------------------------------------------------------------------
+                      4.15      1.41      0.00      2.74        2000/2000     Mutex#synchronize
+  38.19%  12.97%      4.15      1.41      0.00      2.74             2000     StrokeDB::Skiplist#find_with_update
+                      0.13      0.13      0.00      0.00      33000/75137     Fixnum#>
+                      0.12      0.12      0.00      0.00      32000/67128     Fixnum#-
+                      1.31      0.85      0.00      0.47      42519/89360     StrokeDB::Skiplist#node_compare
+                      0.15      0.15      0.00      0.00      42519/43647     Fixnum#<
+                      0.13      0.13      0.00      0.00      32000/44640     Array#[]=
+                      0.90      0.59      0.00      0.31     42519/110510     StrokeDB::Skiplist#node_next
+--------------------------------------------------------------------------------
+                      2.50      0.01      0.00      2.49        2000/2000     Array#each-1
+  22.99%   0.12%      2.50      0.01      0.00      2.49             2000     StrokeDB::SkiplistVolume#find
+                      2.49      0.03      0.00      2.45        2000/2000     StrokeDB::Skiplist#find
+--------------------------------------------------------------------------------
+                      2.49      0.03      0.00      2.45        2000/2000     StrokeDB::SkiplistVolume#find
+  22.87%   0.32%      2.49      0.03      0.00      2.45             2000     StrokeDB::Skiplist#find
+                      2.36      0.68      0.00      1.68        2000/2000     StrokeDB::Skiplist#find_nearest_node
+                      0.07      0.04      0.00      0.03       2000/89360     StrokeDB::Skiplist#node_compare
+                      0.00      0.00      0.00      0.00        2000/4022     Fixnum#==
+                      0.02      0.01      0.00      0.00       2000/24000     StrokeDB::Skiplist#node_value
+--------------------------------------------------------------------------------
+                      0.07      0.04      0.00      0.03       2000/89360     StrokeDB::Skiplist#find
+                      0.89      0.55      0.00      0.34      42841/89360     StrokeDB::Skiplist#find_nearest_node
+                      1.31      0.85      0.00      0.47      42519/89360     StrokeDB::Skiplist#find_with_update
+                      0.14      0.08      0.00      0.07       2000/89360     Mutex#synchronize
+  22.28%  13.90%      2.42      1.51      0.00      0.91            89360     StrokeDB::Skiplist#node_compare
+                      0.10      0.10      0.00      0.00      35173/36090     String#<=>
+                      0.09      0.09      0.00      0.00     35173/328127     Array#[]
+                      0.72      0.53      0.00      0.19    124533/146555     Array#==
+--------------------------------------------------------------------------------
+                      2.36      0.68      0.00      1.68        2000/2000     StrokeDB::Skiplist#find
+  21.67%   6.26%      2.36      0.68      0.00      1.68             2000     StrokeDB::Skiplist#find_nearest_node
+                      0.07      0.07      0.00      0.00      33000/75137     Fixnum#>
+                      0.07      0.07      0.00      0.00      32000/67128     Fixnum#-
+                      0.89      0.55      0.00      0.34      42841/89360     StrokeDB::Skiplist#node_compare
+                      0.03      0.02      0.00      0.01        2000/4000     StrokeDB::Skiplist#node_level
+                      0.09      0.09      0.00      0.00      42841/42841     Fixnum#<=
+                      0.01      0.01      0.00      0.00        1000/3022     StrokeDB::Skiplist#anchor
+                      0.53      0.35      0.00      0.18     42841/110510     StrokeDB::Skiplist#node_next
+--------------------------------------------------------------------------------
+                      0.53      0.35      0.00      0.18     42841/110510     StrokeDB::Skiplist#find_nearest_node
+                      0.07      0.05      0.00      0.02      3128/110510     StrokeDB::Skiplist#node_insert_after!
+                      0.90      0.59      0.00      0.31     42519/110510     StrokeDB::Skiplist#find_with_update
+                      0.30      0.20      0.00      0.10     22022/110510     StrokeDB::Skiplist#each_node
+  16.65%  10.92%      1.81      1.19      0.00      0.62           110510     StrokeDB::Skiplist#node_next
+                      0.62      0.62      0.00      0.00    221020/328127     Array#[]
+--------------------------------------------------------------------------------
+                      0.15      0.00      0.00      0.15             2/22     StrokeDB::SkiplistVolume#close!
+                      1.50      0.00      0.00      1.49            20/22     Integer#times
+  15.12%   0.03%      1.64      0.00      0.00      1.64               22     StrokeDB::SkiplistVolume#dump!
+                      0.01      0.01      0.00      0.00            44/44     <Class::File>#rename
+                      1.60      0.00      0.00      1.60            22/22     StrokeDB::Skiplist#dump
+                      0.00      0.00      0.00      0.00            22/50     IO#sync=
+                      0.00      0.00      0.00      0.00            22/46     <Class::IO>#open
+                      0.01      0.00      0.00      0.00            22/24     StrokeDB::SkiplistVolume#init_log_file
+                      0.00      0.00      0.00      0.00            22/24     IO#close
+                      0.00      0.00      0.00      0.00          22/2022     IO#fsync
+                      0.01      0.01      0.00      0.00          22/6036     IO#write
+                      0.00      0.00      0.00      0.00            22/24     <Class::File>#delete
+--------------------------------------------------------------------------------
+                      1.60      0.00      0.00      1.60            22/22     StrokeDB::SkiplistVolume#dump!
+  14.76%   0.01%      1.60      0.00      0.00      1.60               22     StrokeDB::Skiplist#dump
+                      0.12      0.12      0.00      0.00          22/2022     <Module::Marshal>#dump
+                      1.49      0.00      0.00      1.49            22/22     StrokeDB::Skiplist#to_a
+--------------------------------------------------------------------------------
+                      1.50      0.00      0.00      1.50              2/6     <Module::Benchmark>#measure
+                      0.00      0.00      0.00      0.00              2/6     StrokeDB::Skiplist#new_anchors
+                      0.06      0.03      0.00      0.03              2/6     Benchmark#benchmark
+  14.30%   0.28%      1.55      0.03      0.00      1.52                6     Integer#times
+                      1.50      0.00      0.00      1.49            20/22     StrokeDB::SkiplistVolume#dump!
+                      0.00      0.00      0.00      0.00       2000/24174     Array#<<
+                      0.00      0.00      0.00      0.00       128/328127     Array#[]
+                      0.01      0.01      0.00      0.00        4000/4019     Fixnum#to_s
+                      0.00      0.00      0.00      0.00        128/44640     Array#[]=
+                      0.01      0.01      0.00      0.00        4000/4006     String#ljust
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00            12/43     Hash#stringify_keys
+                      0.00      0.00      0.00      0.00             9/43     <Module::JSON>#deep_const_get
+                      1.49      0.00      0.00      1.49            22/43     StrokeDB::Skiplist#to_a
+  13.69%   0.00%      1.49      0.00      0.00      1.49               43     Enumerable#inject
+                      0.00      0.00      0.00      0.00             9/36     Array#each-1
+                      1.49      0.00      0.00      1.49            22/22     StrokeDB::Skiplist#each
+                      0.00      0.00      0.00      0.00            12/13     Hash#each
+--------------------------------------------------------------------------------
+                      1.49      0.00      0.00      1.49            22/22     StrokeDB::Skiplist#dump
+  13.68%   0.00%      1.49      0.00      0.00      1.49               22     StrokeDB::Skiplist#to_a
+                      1.49      0.00      0.00      1.49            22/43     Enumerable#inject
+--------------------------------------------------------------------------------
+                      1.49      0.00      0.00      1.49            22/22     Enumerable#inject
+  13.68%   0.00%      1.49      0.00      0.00      1.49               22     StrokeDB::Skiplist#each
+                      1.49      0.56      0.00      0.92            22/22     StrokeDB::Skiplist#each_node
+--------------------------------------------------------------------------------
+                      1.49      0.56      0.00      0.92            22/22     StrokeDB::Skiplist#each
+  13.68%   5.19%      1.49      0.56      0.00      0.92               22     StrokeDB::Skiplist#each_node
+                      0.06      0.06      0.00      0.00      22000/24174     Array#<<
+                      0.20      0.15      0.00      0.05      22000/22000     StrokeDB::Skiplist#node_key
+                      0.20      0.15      0.00      0.05      22000/24000     StrokeDB::Skiplist#node_value
+                      0.16      0.11      0.00      0.05     22022/146555     Array#==
+                      0.00      0.00      0.00      0.00          22/3022     StrokeDB::Skiplist#anchor
+                      0.30      0.20      0.00      0.10     22022/110510     StrokeDB::Skiplist#node_next
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00         9/328127     Inline::C#generate
+                      0.05      0.05      0.00      0.00     12512/328127     StrokeDB::Skiplist#node_insert_after!
+                      0.05      0.05      0.00      0.00     22000/328127     StrokeDB::Skiplist#node_key
+                      0.00      0.00      0.00      0.00       128/328127     Integer#times
+                      0.05      0.05      0.00      0.00     24000/328127     StrokeDB::Skiplist#node_value
+                      0.09      0.09      0.00      0.00     35173/328127     StrokeDB::Skiplist#node_compare
+                      0.02      0.02      0.00      0.00      4000/328127     StrokeDB::Skiplist#node_level
+                      0.00      0.00      0.00      0.00       154/328127     Gem::Specification#installation_path
+                      0.02      0.02      0.00      0.00      6000/328127     Array#each-1
+                      0.01      0.01      0.00      0.00      3128/328127     Mutex#synchronize
+                      0.00      0.00      0.00      0.00         3/328127     Kernel#gem_original_require-1
+                      0.62      0.62      0.00      0.00    221020/328127     StrokeDB::Skiplist#node_next
+   8.48%   8.48%      0.92      0.92      0.00      0.00           328127     Array#[]
+--------------------------------------------------------------------------------
+                      0.09      0.00      0.00      0.09            3/134     Inline::C#load_cache
+                      0.03      0.00      0.00      0.03            1/134     Kernel#require_one_of
+                      0.29      0.00      0.00      0.29           16/134     Kernel#gem_original_require
+                      0.00      0.00      0.00      0.00            3/134     Inline::C#load
+                      0.49      0.00      0.00      0.49          111/134     Kernel#gem_original_require-1
+   8.30%   0.01%      0.90      0.00      0.00      0.90              134     Kernel#require-1
+                      0.00      0.00      0.00      0.00              7/8     Exception#message
+                      0.00      0.00      0.00      0.00            3/157     Gem::Version#to_s
+                      0.00      0.00      0.00      0.00             7/81     <Class::Regexp>#escape
+                      0.00      0.00      0.00      0.00             7/99     Module#===
+                      0.14      0.00      0.00      0.14              7/8     Gem::GemPathSearcher#find
+                      0.04      0.00      0.00      0.04              7/8     <Module::Gem>#searcher
+                      0.00      0.00      0.00      0.00              4/5     Kernel#raise
+                      0.71      0.09      0.00      0.62          137/137     Kernel#gem_original_require-1
+                      0.01      0.00      0.00      0.01              3/3     <Module::Gem>#activate
+--------------------------------------------------------------------------------
+                      0.72      0.53      0.00      0.19    124533/146555     StrokeDB::Skiplist#node_compare
+                      0.16      0.11      0.00      0.05     22022/146555     StrokeDB::Skiplist#each_node
+   8.09%   5.89%      0.88      0.64      0.00      0.24           146555     Array#==
+                      0.24      0.24      0.00      0.00      92346/92346     Array#==-1
+--------------------------------------------------------------------------------
+                      0.74      0.22      0.00      0.52        2000/2000     StrokeDB::SkiplistVolume#insert
+   6.82%   2.04%      0.74      0.22      0.00      0.52             2000     StrokeDB::SkiplistVolume#write_log
+                      0.01      0.01      0.00      0.00       2000/75137     Fixnum#>
+                      0.05      0.05      0.00      0.00        2000/2022     <Module::Marshal>#dump
+                      0.14      0.03      0.00      0.10        2000/2000     <Class::Digest::Class>#digest
+                      0.03      0.03      0.00      0.00        6000/6003     String#size
+                      0.03      0.02      0.00      0.01        2000/2000     Array#pack
+                      0.03      0.03      0.00      0.00        6000/7137     Fixnum#+
+                      0.14      0.14      0.00      0.00        2000/2022     IO#fsync
+                      0.09      0.09      0.00      0.00        6000/6036     IO#write
+--------------------------------------------------------------------------------
+                      0.71      0.09      0.00      0.62          137/137     Kernel#require-1
+   6.54%   0.84%      0.71      0.09      0.00      0.62              137     Kernel#gem_original_require-1
+                      0.00      0.00      0.00      0.00             3/23     <Module::English::Inflect>#singular_rule
+                      0.00      0.00      0.00      0.00              1/1     <Class::Proc>#new
+                      0.00      0.00      0.00      0.00              1/1     Module#attr_writer
+                      0.00      0.00      0.00      0.00            1/998     <Class::File>#join
+                      0.00      0.00      0.00      0.00              6/8     Fixnum#*
+                      0.00      0.00      0.00      0.00              2/2     Module#attr
+                      0.00      0.00      0.00      0.00             1/11     Module#const_defined?
+                      0.00      0.00      0.00      0.00              1/1     <Module::JSON>#parser=
+                      0.00      0.00      0.00      0.00              1/1     <Module::DRb::DRbProtocol>#add_protocol
+                      0.00      0.00      0.00      0.00            13/22     Module#include
+                      0.00      0.00      0.00      0.00            31/32     Kernel#freeze
+                      0.00      0.00      0.00      0.00              1/1     Hash#invert
+                      0.01      0.00      0.00      0.01              7/7     <Module::StrokeDB::Meta>#new
+                      0.00      0.00      0.00      0.00            28/28     Module#module_function
+                      0.00      0.00      0.00      0.00            20/20     <Module::English::Inflect>#rule
+                      0.00      0.00      0.00      0.00              2/2     Class#declare_optimized_methods
+                      0.00      0.00      0.00      0.00              1/1     Float#-@
+                      0.00      0.00      0.00      0.00         987/1138     Module#method_added
+                      0.00      0.00      0.00      0.00             1/10     Hash#merge
+                      0.00      0.00      0.00      0.00            2/334     Array#join
+                      0.00      0.00      0.00      0.00            1/161     <Class::File>#expand_path
+                      0.00      0.00      0.00      0.00              2/7     Kernel#respond_to?
+                      0.00      0.00      0.00      0.00            14/14     Module#public
+                      0.00      0.00      0.00      0.00              1/1     Float#**
+                      0.00      0.00      0.00      0.00            5/543     String#==
+                      0.00      0.00      0.00      0.00              3/4     Float#/
+                      0.00      0.00      0.00      0.00              3/4     Module#protected
+                      0.00      0.00      0.00      0.00          157/208     Kernel#singleton_method_added
+                      0.00      0.00      0.00      0.00            1/192     String#split
+                      0.49      0.00      0.00      0.49          111/134     Kernel#require-1
+                      0.00      0.00      0.00      0.00             7/10     Exception#set_backtrace
+                      0.00      0.00      0.00      0.00             1/29     Module#module_eval
+                      0.00      0.00      0.00      0.00              2/2     String#chomp
+                      0.00      0.00      0.00      0.00              1/1     <Module::JSON>#generator=
+                      0.00      0.00      0.00      0.00             2/45     Array#each
+                      0.00      0.00      0.00      0.00            12/12     Module#attr_accessor
+                      0.00      0.00      0.00      0.00             2/22     <Module::English::Inflect>#plural_rule
+                      0.00      0.00      0.00      0.00           2/6003     String#size
+                      0.00      0.00      0.00      0.00             7/15     Exception#backtrace
+                      0.00      0.00      0.00      0.00             1/10     Module#instance_methods
+                      0.00      0.00      0.00      0.00              1/9     Enumerable#sort_by
+                      0.00      0.00      0.00      0.00             2/58     Module#method_undefined
+                      0.00      0.00      0.00      0.00             2/48     Array#map
+                      0.00      0.00      0.00      0.00              1/5     Fixnum#/
+                      0.00      0.00      0.00      0.00              3/3     Regexp#to_s
+                      0.00      0.00      0.00      0.00              1/1     <Module::StrokeDB>#serialization_method=
+                      0.00      0.00      0.00      0.00            3/998     Hash#[]
+                      0.00      0.00      0.00      0.00            2/163     <Class::File>#dirname
+                      0.00      0.00      0.00      0.00             1/99     Module#===
+                      0.00      0.00      0.00      0.00              1/5     Comparable#<
+                      0.00      0.00      0.00      0.00              1/1     <Class::Module>#reset_nsurls
+                      0.00      0.00      0.00      0.00          14/2155     Class#new
+                      0.00      0.00      0.00      0.00              1/1     <Module::Gem>#ruby
+                      0.00      0.00      0.00      0.00             1/70     String#+
+                      0.00      0.00      0.00      0.00              2/2     Kernel#`
+                      0.00      0.00      0.00      0.00              1/1     <Module::StrokeDB>#head
+                      0.00      0.00      0.00      0.00              1/2     Comparable#>=
+                      0.00      0.00      0.00      0.00            37/41     Module#private
+                      0.00      0.00      0.00      0.00              1/1     <Module::StrokeDB>#use_perthread_default_config!
+                      0.00      0.00      0.00      0.00            37/37     <Module::English::Inflect>#word
+                      0.00      0.00      0.00      0.00            6/158     <Class::Object>#allocate
+                      0.00      0.00      0.00      0.00              1/1     Fixnum#**
+                      0.00      0.00      0.00      0.00            14/18     Module#alias_method
+                      0.00      0.00      0.00      0.00             1/38     <Module::English::Inflect>#singular_word
+                      0.00      0.00      0.00      0.00             1/10     Array#reverse
+                      0.00      0.00      0.00      0.00            43/43     Module#attr_reader
+                      0.00      0.00      0.00      0.00              1/1     <Module::StrokeDB::Util>#random_uuid_raw
+                      0.00      0.00      0.00      0.00         3/328127     Array#[]
+                      0.11      0.00      0.00      0.11              3/4     Module#inline
+                      0.00      0.00      0.00      0.00          108/111     Class#inherited
+                      0.00      0.00      0.00      0.00           1/4009     Array#*
+                      0.00      0.00      0.00      0.00              1/5     Hash#values
+                      0.00      0.00      0.00      0.00              1/1     <Module::StrokeDB::Util>#random_uuid
+--------------------------------------------------------------------------------
+                      0.04      0.00      0.00      0.04              1/6     Inline::C#load_cache
+                      0.00      0.00      0.00      0.00              1/6     Inline::C#load
+                      0.00      0.00      0.00      0.00              2/6     Kernel#instance_eval
+                      0.32      0.00      0.00      0.32              2/6     Kernel#load
+   3.32%   0.00%      0.36      0.00      0.00      0.36                6     Kernel#require
+                      0.00      0.00      0.00      0.00              1/8     Exception#message
+                      0.00      0.00      0.00      0.00             1/81     <Class::Regexp>#escape
+                      0.00      0.00      0.00      0.00             1/99     Module#===
+                      0.04      0.00      0.00      0.04              1/8     Gem::GemPathSearcher#find
+                      0.00      0.00      0.00      0.00              1/8     <Module::Gem>#searcher
+                      0.32      0.00      0.00      0.32              6/6     Kernel#gem_original_require
+                      0.00      0.00      0.00      0.00              1/5     Kernel#raise
+--------------------------------------------------------------------------------
+                      0.36      0.18      0.00      0.17        3128/3128     Mutex#synchronize
+   3.30%   1.69%      0.36      0.18      0.00      0.17             3128     StrokeDB::Skiplist#node_insert_after!
+                      0.05      0.05      0.00      0.00     12512/328127     Array#[]
+                      0.05      0.05      0.00      0.00      12512/44640     Array#[]=
+                      0.07      0.05      0.00      0.02      3128/110510     StrokeDB::Skiplist#node_next
+--------------------------------------------------------------------------------
+                      0.32      0.00      0.00      0.32              6/6     Kernel#require
+   2.96%   0.02%      0.32      0.00      0.00      0.32                6     Kernel#gem_original_require
+                      0.00      0.00      0.00      0.00           1/2155     Class#new
+                      0.00      0.00      0.00      0.00          1/24174     Array#<<
+                      0.00      0.00      0.00      0.00             1/15     Exception#backtrace
+                      0.00      0.00      0.00      0.00             1/10     Exception#set_backtrace
+                      0.00      0.00      0.00      0.00            2/161     <Class::File>#expand_path
+                      0.00      0.00      0.00      0.00           3/1138     Module#method_added
+                      0.00      0.00      0.00      0.00            2/208     Kernel#singleton_method_added
+                      0.00      0.00      0.00      0.00             1/70     String#+
+                      0.00      0.00      0.00      0.00              1/3     String#*
+                      0.00      0.00      0.00      0.00            3/163     <Class::File>#dirname
+                      0.00      0.00      0.00      0.00             1/11     <Object::Object>#[]
+                      0.03      0.00      0.00      0.03              1/1     Kernel#require_one_of
+                      0.00      0.00      0.00      0.00           4/4019     Fixnum#to_s
+                      0.00      0.00      0.00      0.00             2/14     Array#unshift
+                      0.29      0.00      0.00      0.29           16/134     Kernel#require-1
+                      0.00      0.00      0.00      0.00            1/334     Array#join
+                      0.00      0.00      0.00      0.00              1/5     Array#uniq!
+                      0.00      0.00      0.00      0.00            2/998     <Class::File>#join
+                      0.00      0.00      0.00      0.00            1/111     Class#inherited
+--------------------------------------------------------------------------------
+                      0.24      0.24      0.00      0.00      92346/92346     Array#==
+   2.20%   2.20%      0.24      0.24      0.00      0.00            92346     Array#==-1
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00          9/75137     Inline::C#generate
+                      0.07      0.07      0.00      0.00      33000/75137     StrokeDB::Skiplist#find_nearest_node
+                      0.01      0.01      0.00      0.00       2000/75137     StrokeDB::SkiplistVolume#insert
+                      0.13      0.13      0.00      0.00      33000/75137     StrokeDB::Skiplist#find_with_update
+                      0.02      0.02      0.00      0.00       5128/75137     Mutex#synchronize
+                      0.01      0.01      0.00      0.00       2000/75137     StrokeDB::SkiplistVolume#write_log
+   2.13%   2.13%      0.23      0.23      0.00      0.00            75137     Fixnum#>
+--------------------------------------------------------------------------------
+                      0.02      0.01      0.00      0.00       2000/24000     StrokeDB::Skiplist#find
+                      0.20      0.15      0.00      0.05      22000/24000     StrokeDB::Skiplist#each_node
+   1.97%   1.47%      0.21      0.16      0.00      0.05            24000     StrokeDB::Skiplist#node_value
+                      0.05      0.05      0.00      0.00     24000/328127     Array#[]
+--------------------------------------------------------------------------------
+                      0.20      0.15      0.00      0.05      22000/22000     StrokeDB::Skiplist#each_node
+   1.86%   1.38%      0.20      0.15      0.00      0.05            22000     StrokeDB::Skiplist#node_key
+                      0.05      0.05      0.00      0.00     22000/328127     Array#[]
+--------------------------------------------------------------------------------
+                      0.07      0.07      0.00      0.00      32000/67128     StrokeDB::Skiplist#find_nearest_node
+                      0.12      0.12      0.00      0.00      32000/67128     StrokeDB::Skiplist#find_with_update
+                      0.01      0.01      0.00      0.00       3128/67128     Mutex#synchronize
+   1.84%   1.84%      0.20      0.20      0.00      0.00            67128     Fixnum#-
+--------------------------------------------------------------------------------
+                      0.14      0.00      0.00      0.14              7/8     Kernel#require-1
+                      0.04      0.00      0.00      0.04              1/8     Kernel#require
+   1.68%   0.00%      0.18      0.00      0.00      0.18                8     Gem::GemPathSearcher#find
+                      0.18      0.00      0.00      0.18              8/8     Enumerable#find
+--------------------------------------------------------------------------------
+                      0.18      0.00      0.00      0.18              8/8     Gem::GemPathSearcher#find
+   1.68%   0.00%      0.18      0.00      0.00      0.18                8     Enumerable#find
+                      0.18      0.00      0.00      0.18             8/45     Array#each
+--------------------------------------------------------------------------------
+                      0.05      0.05      0.00      0.00      12512/44640     StrokeDB::Skiplist#node_insert_after!
+                      0.13      0.13      0.00      0.00      32000/44640     StrokeDB::Skiplist#find_with_update
+                      0.00      0.00      0.00      0.00        128/44640     Integer#times
+   1.65%   1.65%      0.18      0.18      0.00      0.00            44640     Array#[]=
+--------------------------------------------------------------------------------
+                      0.18      0.01      0.00      0.17          821/821     Array#each
+   1.63%   0.07%      0.18      0.01      0.00      0.17              821     Gem::GemPathSearcher#matching_file?
+                      0.17      0.02      0.00      0.15          821/821     Gem::GemPathSearcher#matching_files
+                      0.00      0.00      0.00      0.00          821/851     Array#empty?
+--------------------------------------------------------------------------------
+                      0.17      0.02      0.00      0.15          821/821     Gem::GemPathSearcher#matching_file?
+   1.55%   0.18%      0.17      0.02      0.00      0.15              821     Gem::GemPathSearcher#matching_files
+                      0.14      0.14      0.00      0.00          821/821     <Class::Dir>#[]
+                      0.00      0.00      0.00      0.00          821/998     Hash#[]
+                      0.00      0.00      0.00      0.00          821/829     Array#select
+                      0.00      0.00      0.00      0.00          821/821     <Module::Gem>#suffix_pattern
+                      0.00      0.00      0.00      0.00          821/965     Kernel#object_id
+                      0.00      0.00      0.00      0.00          821/998     <Class::File>#join
+--------------------------------------------------------------------------------
+                      0.12      0.12      0.00      0.00          22/2022     StrokeDB::Skiplist#dump
+                      0.05      0.05      0.00      0.00        2000/2022     StrokeDB::SkiplistVolume#write_log
+   1.49%   1.49%      0.16      0.16      0.00      0.00             2022     <Module::Marshal>#dump
+--------------------------------------------------------------------------------
+                      0.16      0.11      0.00      0.05        2000/2000     Mutex#synchronize
+   1.47%   1.02%      0.16      0.11      0.00      0.05             2000     StrokeDB::Skiplist#random_level
+                      0.02      0.02      0.00      0.00        3128/3128     Kernel#rand
+                      0.01      0.01      0.00      0.00       1128/43647     Fixnum#<
+                      0.02      0.02      0.00      0.00        3128/3128     Float#<
+                      0.01      0.01      0.00      0.00        1128/7137     Fixnum#+
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00       1128/43647     StrokeDB::Skiplist#random_level
+                      0.15      0.15      0.00      0.00      42519/43647     StrokeDB::Skiplist#find_with_update
+   1.45%   1.45%      0.16      0.16      0.00      0.00            43647     Fixnum#<
+--------------------------------------------------------------------------------
+                      0.11      0.00      0.00      0.11              3/4     Kernel#gem_original_require-1
+                      0.04      0.00      0.00      0.04              1/4     Kernel#instance_eval
+   1.39%   0.01%      0.15      0.00      0.00      0.15                4     Module#inline
+                      0.01      0.00      0.00      0.01              9/9     Inline::C#c
+                      0.00      0.00      0.00      0.00           4/2155     Class#new
+                      0.00      0.00      0.00      0.00              4/4     Inline::C#build
+                      0.00      0.00      0.00      0.00              1/1     Inline::C#add_compile_flags
+                      0.00      0.00      0.00      0.00            4/259     Hash#[]=
+                      0.00      0.00      0.00      0.00            12/99     Module#===
+                      0.00      0.00      0.00      0.00            8/998     Hash#[]
+                      0.14      0.00      0.00      0.14              4/4     Inline::C#load_cache
+                      0.00      0.00      0.00      0.00              4/4     <Module::Inline>#register
+                      0.00      0.00      0.00      0.00             4/23     Module#const_get
+                      0.00      0.00      0.00      0.00              4/4     Inline::C#prefix
+                      0.00      0.00      0.00      0.00              4/4     Inline::C#load
+                      0.00      0.00      0.00      0.00              3/3     Inline::C#add_to_init
+                      0.00      0.00      0.00      0.00              1/1     Inline::C#add_link_flags
+--------------------------------------------------------------------------------
+                      0.15      0.00      0.00      0.15              2/2     Benchmark#benchmark
+   1.36%   0.00%      0.15      0.00      0.00      0.15                2     StrokeDB::SkiplistVolume#close!
+                      0.15      0.00      0.00      0.15             2/22     StrokeDB::SkiplistVolume#dump!
+                      0.00      0.00      0.00      0.00            8/208     Kernel#singleton_method_added
+                      0.00      0.00      0.00      0.00              2/2     File#path
+                      0.00      0.00      0.00      0.00             2/24     IO#close
+                      0.00      0.00      0.00      0.00             2/24     <Class::File>#delete
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00          22/2022     StrokeDB::SkiplistVolume#dump!
+                      0.14      0.14      0.00      0.00        2000/2022     StrokeDB::SkiplistVolume#write_log
+   1.35%   1.35%      0.15      0.15      0.00      0.00             2022     IO#fsync
+--------------------------------------------------------------------------------
+                      0.14      0.00      0.00      0.14              4/4     Module#inline
+   1.25%   0.00%      0.14      0.00      0.00      0.14                4     Inline::C#load_cache
+                      0.00      0.00      0.00      0.00              4/4     <Class::File>#basename
+                      0.00      0.00      0.00      0.00             4/12     Inline::C#so_name
+                      0.00      0.00      0.00      0.00             4/99     Module#===
+                      0.09      0.00      0.00      0.09            3/134     Kernel#require-1
+                      0.04      0.00      0.00      0.04              1/6     Kernel#require
+                      0.00      0.00      0.00      0.00            4/998     <Class::File>#join
+--------------------------------------------------------------------------------
+                      0.14      0.14      0.00      0.00          821/821     Gem::GemPathSearcher#matching_files
+   1.25%   1.25%      0.14      0.14      0.00      0.00              821     <Class::Dir>#[]
+--------------------------------------------------------------------------------
+                      0.14      0.03      0.00      0.10        2000/2000     StrokeDB::SkiplistVolume#write_log
+   1.24%   0.30%      0.14      0.03      0.00      0.10             2000     <Class::Digest::Class>#digest
+                      0.01      0.01      0.00      0.00        2000/2008     <Class::Digest::Base>#allocate
+                      0.08      0.04      0.00      0.04        2000/2000     Digest::Instance#digest
+                      0.01      0.01      0.00      0.00        2000/2010     Object#initialize
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00          1/36090     Comparable#>=
+                      0.00      0.00      0.00      0.00          1/36090     Comparable#<
+                      0.10      0.10      0.00      0.00      35173/36090     StrokeDB::Skiplist#node_compare
+                      0.00      0.00      0.00      0.00          8/36090     Enumerable#sort_by
+                      0.00      0.00      0.00      0.00        907/36090     Array#sort
+   0.94%   0.94%      0.10      0.10      0.00      0.00            36090     String#<=>
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00           6/2155     <Module::Benchmark>#measure
+                      0.00      0.00      0.00      0.00         104/2155     StrokeDB::Meta#add_callback
+                      0.00      0.00      0.00      0.00           1/2155     <Class::Gem::Requirement>#default
+                      0.00      0.00      0.00      0.00           7/2155     <Module::StrokeDB::Meta>#new
+                      0.00      0.00      0.00      0.00           4/2155     Gem::SourceIndex#find_name
+                      0.00      0.00      0.00      0.00           1/2155     Kernel#gem_original_require
+                      0.00      0.00      0.00      0.00           2/2155     <Module::FileUtils>#remove_entry
+                      0.00      0.00      0.00      0.00           4/2155     Benchmark#benchmark
+                      0.09      0.03      0.00      0.06        2001/2155     Mutex#synchronize
+                      0.00      0.00      0.00      0.00          14/2155     Kernel#gem_original_require-1
+                      0.00      0.00      0.00      0.00           4/2155     Inline::C#module_name
+                      0.00      0.00      0.00      0.00           3/2155     <Module::Gem>#activate
+                      0.00      0.00      0.00      0.00           4/2155     Module#inline
+   0.93%   0.31%      0.10      0.03      0.00      0.07             2155     Class#new
+                      0.00      0.00      0.00      0.00              1/3     <Class::Mutex>#allocate
+                      0.00      0.00      0.00      0.00          104/104     StrokeDB::Callback#initialize
+                      0.00      0.00      0.00      0.00              7/7     <Class::Module>#allocate
+                      0.00      0.00      0.00      0.00              2/2     Class#initialize
+                      0.01      0.01      0.00      0.00        2000/2000     <Class::Array>#allocate
+                      0.00      0.00      0.00      0.00              4/4     Inline::C#initialize
+                      0.00      0.00      0.00      0.00             1/13     <Class::Time>#allocate
+                      0.00      0.00      0.00      0.00              1/1     String#initialize
+                      0.00      0.00      0.00      0.00          139/158     <Class::Object>#allocate
+                      0.00      0.00      0.00      0.00              6/6     Benchmark::Tms#initialize
+                      0.00      0.00      0.00      0.00              2/2     StrokeDB::SkiplistVolume#initialize
+                      0.00      0.00      0.00      0.00              2/2     <Class::Class>#allocate
+                      0.00      0.00      0.00      0.00             8/10     Exception#initialize
+                      0.01      0.01      0.00      0.00        2000/2000     Array#initialize
+                      0.00      0.00      0.00      0.00              2/2     FileUtils::Entry_#initialize
+                      0.00      0.00      0.00      0.00           4/2008     <Class::Digest::Base>#allocate
+                      0.00      0.00      0.00      0.00              7/7     Gem::Dependency#initialize
+                      0.04      0.00      0.00      0.04              1/1     Gem::GemPathSearcher#initialize
+                      0.00      0.00      0.00      0.00              2/2     Benchmark::Report#initialize
+                      0.00      0.00      0.00      0.00           7/2010     Object#initialize
+                      0.00      0.00      0.00      0.00              1/4     Gem::Requirement#initialize
+                      0.00      0.00      0.00      0.00              7/7     Module#initialize
+                      0.00      0.00      0.00      0.00             1/13     Time#initialize
+                      0.00      0.00      0.00      0.00             1/16     <Class::String>#allocate
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00          22/6036     StrokeDB::SkiplistVolume#dump!
+                      0.00      0.00      0.00      0.00          14/6036     Kernel#print
+                      0.09      0.09      0.00      0.00        6000/6036     StrokeDB::SkiplistVolume#write_log
+   0.90%   0.90%      0.10      0.10      0.00      0.00             6036     IO#write
+--------------------------------------------------------------------------------
+                      0.09      0.09      0.00      0.00      42841/42841     StrokeDB::Skiplist#find_nearest_node
+   0.81%   0.81%      0.09      0.09      0.00      0.00            42841     Fixnum#<=
+--------------------------------------------------------------------------------
+                      0.03      0.02      0.00      0.01        2000/4000     StrokeDB::Skiplist#find_nearest_node
+                      0.06      0.04      0.00      0.02        2000/4000     Mutex#synchronize
+   0.80%   0.52%      0.09      0.06      0.00      0.03             4000     StrokeDB::Skiplist#node_level
+                      0.02      0.02      0.00      0.00      4000/328127     Array#[]
+                      0.02      0.02      0.00      0.00        4000/4018     Array#size
+--------------------------------------------------------------------------------
+                      0.08      0.04      0.00      0.04        2000/2000     <Class::Digest::Class>#digest
+   0.77%   0.36%      0.08      0.04      0.00      0.04             2000     Digest::Instance#digest
+                      0.02      0.02      0.00      0.00        4000/4004     Digest::Base#reset
+                      0.01      0.01      0.00      0.00        2000/2004     Digest::Base#finish
+                      0.01      0.01      0.00      0.00        2000/2000     Digest::Base#update
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00           4/2004     StrokeDB::Skiplist#new_anchors
+                      0.06      0.04      0.00      0.03        2000/2004     Mutex#synchronize
+   0.58%   0.33%      0.06      0.04      0.00      0.03             2004     StrokeDB::Skiplist#new_node
+                      0.03      0.03      0.00      0.00        4008/4009     Array#*
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00        104/24174     StrokeDB::Meta#add_callback
+                      0.00      0.00      0.00      0.00          9/24174     Inline::C#generate
+                      0.00      0.00      0.00      0.00       2000/24174     Integer#times
+                      0.00      0.00      0.00      0.00          7/24174     <Module::StrokeDB::Meta>#new
+                      0.00      0.00      0.00      0.00          1/24174     Kernel#gem_original_require
+                      0.00      0.00      0.00      0.00          4/24174     <Module::Inline>#register
+                      0.00      0.00      0.00      0.00         22/24174     <Module::English::Inflect>#plural_rule
+                      0.00      0.00      0.00      0.00         23/24174     <Module::English::Inflect>#singular_rule
+                      0.00      0.00      0.00      0.00          4/24174     Inline::C#prefix
+                      0.06      0.06      0.00      0.00      22000/24174     StrokeDB::Skiplist#each_node
+   0.56%   0.56%      0.06      0.06      0.00      0.00            24174     Array#<<
+--------------------------------------------------------------------------------
+                      0.05      0.00      0.00      0.05              1/1     Kernel#load
+   0.42%   0.00%      0.05      0.00      0.00      0.05                1     StrokeDB::ClassOptimization::ClassMethods#optimize!
+                      0.00      0.00      0.00      0.00            1/998     Hash#[]
+                      0.00      0.00      0.00      0.00              1/1     Class#optimized_methods
+                      0.00      0.00      0.00      0.00             1/28     Symbol#to_s
+                      0.05      0.00      0.00      0.05              1/1     Kernel#instance_eval
+                      0.00      0.00      0.00      0.00             1/45     Array#each
+--------------------------------------------------------------------------------
+                      0.05      0.00      0.00      0.05              1/1     StrokeDB::ClassOptimization::ClassMethods#optimize!
+   0.42%   0.00%      0.05      0.00      0.00      0.05                1     Kernel#instance_eval
+                      0.00      0.00      0.00      0.00              2/6     Kernel#require
+                      0.04      0.00      0.00      0.04              1/4     Module#inline
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        1128/7137     StrokeDB::Skiplist#random_level
+                      0.00      0.00      0.00      0.00           9/7137     Inline::C#generate
+                      0.03      0.03      0.00      0.00        6000/7137     StrokeDB::SkiplistVolume#write_log
+   0.36%   0.36%      0.04      0.04      0.00      0.00             7137     Fixnum#+
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        1000/3022     StrokeDB::Skiplist#find_nearest_node
+                      0.03      0.03      0.00      0.00        2000/3022     Mutex#synchronize
+                      0.00      0.00      0.00      0.00          22/3022     StrokeDB::Skiplist#each_node
+   0.33%   0.33%      0.04      0.04      0.00      0.00             3022     StrokeDB::Skiplist#anchor
+--------------------------------------------------------------------------------
+                      0.04      0.00      0.00      0.04              7/8     Kernel#require-1
+                      0.00      0.00      0.00      0.00              1/8     Kernel#require
+   0.33%   0.00%      0.04      0.00      0.00      0.04                8     <Module::Gem>#searcher
+                      0.04      0.00      0.00      0.04           8/2008     Mutex#synchronize
+--------------------------------------------------------------------------------
+                      0.04      0.00      0.00      0.04              1/1     Class#new
+   0.33%   0.00%      0.04      0.00      0.00      0.04                1     Gem::GemPathSearcher#initialize
+                      0.02      0.00      0.00      0.02              1/1     Gem::GemPathSearcher#init_gemspecs
+                      0.02      0.00      0.00      0.02             1/45     Array#each
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00           1/6003     String#to_raw_uuid
+                      0.00      0.00      0.00      0.00           2/6003     Kernel#gem_original_require-1
+                      0.03      0.03      0.00      0.00        6000/6003     StrokeDB::SkiplistVolume#write_log
+   0.30%   0.30%      0.03      0.03      0.00      0.00             6003     String#size
+--------------------------------------------------------------------------------
+                      0.03      0.02      0.00      0.01        2000/2000     StrokeDB::SkiplistVolume#write_log
+   0.28%   0.20%      0.03      0.02      0.00      0.01             2000     Array#pack
+                      0.01      0.01      0.00      0.00        2000/2001     Integer#to_int
+--------------------------------------------------------------------------------
+                      0.03      0.00      0.00      0.03              1/1     Kernel#gem_original_require
+   0.25%   0.00%      0.03      0.00      0.00      0.03                1     Kernel#require_one_of
+                      0.00      0.00      0.00      0.00              1/1     Module#==
+                      0.00      0.00      0.00      0.00              1/9     Array#shift
+                      0.00      0.00      0.00      0.00             1/15     Array#first
+                      0.03      0.00      0.00      0.03            1/134     Kernel#require-1
+                      0.00      0.00      0.00      0.00             1/23     Kernel#class
+--------------------------------------------------------------------------------
+                      0.03      0.03      0.00      0.00        4008/4009     StrokeDB::Skiplist#new_node
+                      0.00      0.00      0.00      0.00           1/4009     Kernel#gem_original_require-1
+   0.25%   0.25%      0.03      0.03      0.00      0.00             4009     Array#*
+--------------------------------------------------------------------------------
+                      0.02      0.02      0.00      0.00        3128/3128     StrokeDB::Skiplist#random_level
+   0.18%   0.18%      0.02      0.02      0.00      0.00             3128     Kernel#rand
+                      0.00      0.00      0.00      0.00           1/2001     Integer#to_int
+--------------------------------------------------------------------------------
+                      0.02      0.02      0.00      0.00        4000/4004     Digest::Instance#digest
+                      0.00      0.00      0.00      0.00           4/4004     Digest::Instance#hexdigest
+   0.17%   0.17%      0.02      0.02      0.00      0.00             4004     Digest::Base#reset
+--------------------------------------------------------------------------------
+                      0.02      0.02      0.00      0.00        3128/3128     StrokeDB::Skiplist#random_level
+   0.16%   0.16%      0.02      0.02      0.00      0.00             3128     Float#<
+--------------------------------------------------------------------------------
+                      0.02      0.00      0.00      0.02              1/1     Gem::GemPathSearcher#initialize
+   0.16%   0.00%      0.02      0.00      0.00      0.02                1     Gem::GemPathSearcher#init_gemspecs
+                      0.00      0.00      0.00      0.00              1/5     <Module::Gem>#source_index
+                      0.00      0.00      0.00      0.00              1/1     Enumerable#map
+                      0.02      0.01      0.00      0.01             1/10     Array#sort
+--------------------------------------------------------------------------------
+                      0.02      0.01      0.00      0.01             1/10     Gem::GemPathSearcher#init_gemspecs
+                      0.00      0.00      0.00      0.00             9/10     ZenTestMapping#unmunge
+   0.15%   0.08%      0.02      0.01      0.00      0.01               10     Array#sort
+                      0.00      0.00      0.00      0.00        907/36090     String#<=>
+                      0.00      0.00      0.00      0.00            14/18     Gem::Version#<=>
+                      0.01      0.00      0.00      0.00          907/907     Numeric#nonzero?
+--------------------------------------------------------------------------------
+                      0.02      0.00      0.00      0.01          144/144     Array#each
+   0.15%   0.01%      0.02      0.00      0.00      0.01              144     Gem::GemPathSearcher#lib_dirs_for
+                      0.01      0.00      0.00      0.01          144/154     Gem::Specification#full_gem_path
+                      0.00      0.00      0.00      0.00          144/334     Array#join
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00           10/154     Array#map
+                      0.01      0.00      0.00      0.01          144/154     Gem::GemPathSearcher#lib_dirs_for
+   0.14%   0.03%      0.02      0.00      0.00      0.01              154     Gem::Specification#full_gem_path
+                      0.00      0.00      0.00      0.00          154/154     Gem::Specification#full_name
+                      0.01      0.00      0.00      0.00          154/154     Gem::Specification#installation_path
+                      0.00      0.00      0.00      0.00          154/156     <Class::File>#directory?
+                      0.00      0.00      0.00      0.00          154/998     <Class::File>#join
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00           9/4018     Inline::C#generate
+                      0.02      0.02      0.00      0.00        4000/4018     StrokeDB::Skiplist#node_level
+                      0.00      0.00      0.00      0.00           9/4018     Inline::C#parse_signature
+   0.14%   0.14%      0.02      0.02      0.00      0.00             4018     Array#size
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        2000/2000     Class#new
+   0.13%   0.13%      0.01      0.01      0.00      0.00             2000     Array#initialize
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00            44/44     StrokeDB::SkiplistVolume#dump!
+   0.13%   0.13%      0.01      0.01      0.00      0.00               44     <Class::File>#rename
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        2000/2000     Digest::Instance#digest
+   0.12%   0.12%      0.01      0.01      0.00      0.00             2000     Digest::Base#update
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00        2000/4022     StrokeDB::Skiplist#find
+                      0.00      0.00      0.00      0.00           9/4022     Inline::C#generate
+                      0.00      0.00      0.00      0.00           1/4022     String#to_raw_uuid
+                      0.01      0.01      0.00      0.00        2000/4022     Mutex#synchronize
+                      0.00      0.00      0.00      0.00           5/4022     <Class::Dir>#assert_secure
+                      0.00      0.00      0.00      0.00           7/4022     Gem::Version#normalize
+   0.11%   0.11%      0.01      0.01      0.00      0.00             4022     Fixnum#==
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        2000/2004     Digest::Instance#digest
+                      0.00      0.00      0.00      0.00           4/2004     Digest::Instance#hexdigest
+   0.11%   0.11%      0.01      0.01      0.00      0.00             2004     Digest::Base#finish
+--------------------------------------------------------------------------------
+                      0.00      0.00      0.00      0.00           4/2008     Class#new
+                      0.01      0.01      0.00      0.00        2000/2008     <Class::Digest::Class>#digest
+                      0.00      0.00      0.00      0.00           4/2008     Digest::Instance#hexdigest
+   0.11%   0.11%      0.01      0.01      0.00      0.00             2008     <Class::Digest::Base>#allocate
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        4000/4006     Integer#times
+                      0.00      0.00      0.00      0.00           6/4006     Benchmark::Report#report
+   0.10%   0.10%      0.01      0.01      0.00      0.00             4006     String#ljust
+--------------------------------------------------------------------------------
+                      0.01      0.01      0.00      0.00        2000/2000     Class#new
+   0.10%   0.10%      0.01      0.01      0.00      0.00             2000     <Class::Array>#allocate
+--------------------------------------------------------------------------------
+                      0.01      0.00      0.00      0.01              3/3     Kernel#require-1
+   0.10%   0.00%      0.01      0.00      0.00      0.01                3     <Module::Gem>#activate
+                      0.00      0.00      0.00      0.00           3/2155     Class#new
+                      0.00      0.00      0.00      0.00              3/5     <Module::Gem>#source_index
+                      0.00      0.00      0.00      0.00              3/7     Kernel#respond_to?
+                      0.00      0.00      0.00      0.00              3/4     <Module::Gem>#load_path_insert_index
+                      0.00      0.00      0.00      0.00             3/48     Array#map
+                      0.00      0.00      0.00      0.00              3/4     Array#insert
+                      0.00      0.00      0.00      0.00              3/4     Gem::SourceIndex#find_name
+                      0.00      0.00      0.00      0.00             3/32     Array#last
+                      0.00      0.00      0.00      0.00            3/259     Hash#[]=
+                      0.00      0.00      0.00      0.00            6/998     Hash#[]
+                      0.00      0.00      0.00      0.00              3/4     Gem::Specification#runtime_dependencies
+                      0.00      0.00      0.00      0.00             3/14     Array#unshift
+                      0.00      0.00      0.00      0.00            6/851     Array#empty?
+                      0.00      0.00      0.00      0.00              3/8     Gem::Dependency#version_requirements
+                      0.00      0.00      0.00      0.00             3/45     Array#each
+--------------------------------------------------------------------------------
