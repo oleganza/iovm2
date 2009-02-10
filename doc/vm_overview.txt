@@ -32,5 +32,33 @@ Note: digest computation and NCC invocation could be implemented as another filt
 11. If situation is changed and some branch drops below the threshold,
     its branch is dropped off to free up the memory.
 12. TODO: deal with polymorphic branches (http://andreasgal.com/2008/02/28/tree-folding/)
+
+
+Another trace recording strategy:
+
+  Consider the model of a piece of loop being optimized:
     
+    prolog:    X instructions
+    iteration: Y instructions
+    
+  For N cycles we have (X*N + Y*N) instructions executed.
+  
+  If we inline two iterations in place of one we can get (X*N/2 + Y*N) instructions. 
+  We save cpu time by X*N/2 instructions and waste memory by Y instructions.
+  
+  If we inline four iterations in place of one we can get (X*N/4 + Y*N) instructions. 
+  We save cpu time by X*N*3/4 instructions and waste memory by 3*Y instructions.
+
+  If we inline Z iterations in place of one we can get (X + Y*Z)*N/Z = (X*N/Z + Y*N) instructions. 
+  We save cpu time by X*N*(Z-1)/Z instructions and waste memory by (Z-1)*Y instructions.
+  Initial memory size was of (X + Y) and overall cpu time was (X + Y)*N.
+  
+  Now we have:
+  
+    Gmem == (X + Z*Y)/(X + Y)  # relative memory loss
+    Gcpu == (X/Z + Y)/(X + Y)  # relative cpu gain
+
+    Gcpu/Gmem == 1/Z  # we are loosing memory faster than decreasing cpu time 
+  
+  
   
