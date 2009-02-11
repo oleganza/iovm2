@@ -1,0 +1,15 @@
+
+1. Unused Locals object and slots:
+
+  method(1)                    # => constant
+  method(x, x*2)               # => pure function
+  method(m1 + m2)              # => delegating function
+  method(x, y, m1(x) + m2(y))  # => delegating function + arguments
+
+2. Objects on the stack with a visible limited scope: alloc/dealloc without GC
+
+3. Local variables: optimize slot lookups by binding calls to the actual addresses.
+
+4. Slot lookup optimization by using listeners ("invalidate this cache when slot X is changed")
+
+5. 
