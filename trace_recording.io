@@ -18,7 +18,7 @@ while(i <= n,
 )
 
 
-# Simplify it further to use loop() and if() instructions
+# Simplify it further to use loop(), if() and break() instructions
 
 i := 0
 loop(
