@@ -11,6 +11,7 @@ IoObject *IoMessage_locals_performOn_(IoMessage *self, IoObject *locals, IoObjec
 	{		
 		md = DATA(m);
 
+    // messageIsSemicolon
 		if(md->name == state->semicolonSymbol)
 		{
 			target = cachedTarget;
@@ -18,24 +19,26 @@ IoObject *IoMessage_locals_performOn_(IoMessage *self, IoObject *locals, IoObjec
 		else
 		{
 			result = md->cachedResult; // put it on the stack?
-
+      
+      // messageIsRegular
 			if (!result)
 			{
 				IoState_pushRetainPool(state);
 				result = IoObject_perform(target, locals, m);
 				IoState_popRetainPoolExceptFor_(state, result);
+				
+				if (state->stopStatus != MESSAGE_STOP_STATUS_NORMAL)
+  			{
+  				return state->returnValue;
+  			}	
 			}
-
-			//IoObject_freeIfUnreferenced(target);
+			// messageHasCachedResult
+			
 			target = result;
-
-			if (state->stopStatus != MESSAGE_STOP_STATUS_NORMAL)
-			{
-					return state->returnValue;
-			}
 		}
 	} while ((m = md->next));
-
+  
+  //messageIsNil
 	return result;
 }
 
