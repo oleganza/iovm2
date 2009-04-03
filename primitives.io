@@ -27,7 +27,7 @@ Macros := Object clone do(
   )
   messageIsRegular := message(
     lookupSlot # to @value
-    ifMessageIsActivatable(
+    ifSlotIsActivatable(
       activate, 
       readSlot
     )
