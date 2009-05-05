@@ -27,7 +27,7 @@ Macros := Object clone do(
   )
   messageIsRegular := message(
     lookupSlot # to @value
-    ifMessageIsActivatable(
+    ifSlotIsActivatable(
       activate, 
       readSlot
     )
@@ -91,6 +91,19 @@ Macros := Object clone do(
     )
   )
   
+)
+
+Methods := message(
+  Object if3,
+  Object loop,
+  Object return,
+  Object break,
+  Object continue,
+  Object getSlot,
+  Object hasSlot,
+  Object hasLocalSlot,
+  Object setSlot,
+  Object updateSlot
 )
 
 if(isLaunchScript,
