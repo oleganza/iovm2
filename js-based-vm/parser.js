@@ -1,7 +1,7 @@
 #!/usr/bin/env js
 (function(){
   
-  var Grammar = function(All, Any, Capture, Char, Optional, Y)
+  var Grammar = function(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After)
   {
     var spacechar   = Char(" \t")
     var optspace    = Y(function(os){ return Optional(All(spacechar, os)) })
@@ -55,50 +55,53 @@
     return lisp
   }
   
-  var SimpleLisp = function(All, Any, Capture, Char, Optional, Y)
+  var SimpleLisp = function(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After)
   {
-    return Y(function(exp){
-      var captureseq = function(buffer, state){ state.lists.push(buffer)  }
+    var item = Y(function(item){
+      
       var seq = Y(function(seq){
-        return Capture(Any(All(exp, Char(","), seq), exp), captureseq)
+        return Any(All(item, Char(","), seq), item)
       })
+      
       var optseq = Optional(seq)
-      var list   = All(Char("["), optseq, Char("]"))
-      return Any(list, Char("qwertyuiopasdfghjklzxcvbn"))
+      var list   = Before(All(Char("["), optseq, Char("]")), function(s){ return [] })
+      var char   = Capture(Char("qwertyuiopasdfghjklzxcvbn"), function(buf, state){ return buf })
+      
+      return After(Any(list, char), function(s1, s2) { return s1.concat([s2]) })
     })
+    return All(item, EOF)
   }
   
-  var Text = "[[a],[b],[c],[d]]"
+  var Text = "[a,[b]]"
   
   var TestGrammar = function(Parser)
   {
     var parser = Parser(SimpleLisp)
     
-    var state = {
-      numbers: [],
-      lists:   [],
-      list:    null
-    }
+    var ast = []
     
-    var r = parser(Text + " ", state) // tail space is intended
+    var r = parser(Text, ast)
     
     if(!r)
+    {
       print("Syntax error!")
-    else
-      print("Result is '"+ r +"'")
-    
-    return state
+    } else {
+      var tail = r[0]
+      var state = r[1] 
+      return state
+    }
+    return null
   }
   
   
   var Parser = function(grammar)
   {
-    var toArray = function(args)
-    {
+    var toArray = function(args) {
       var arr = []
       for (var i = 0; i < args.length; i++) arr.push(args[i])
       return arr
     }
+    
     
     // The Y Combinator
     var Y = function (gen) {
@@ -112,14 +115,23 @@
     var Optional = function(func)
     {
       return function(text, state) {
-        return func(text, state) || text
+        return func(text, state) || [text, state]
       }
     }
     
+    var EOF = function(text, state) { // matches the end of the text
+      return (text == "" ? [text, state] : null)
+    }
+    
+    var Terminator = function(text, state) { // terminates scanner (possibly in the middle of the text)
+      return ["", state]
+    }
+        
     var Char = function(string)
     {
       return function(text, state) {
-        return ((string.indexOf(text.charAt(0)) > -1) ? text.substr(1) : null)
+        // TODO: count line number on each text.substr(1)
+        return ((text.length > 0 && string.indexOf(text.charAt(0)) > -1) ? [text.substr(1), state] : null)
       }
     }
     
@@ -141,26 +153,51 @@
     {
       var args = toArray(arguments)
       return function(text, state) {
+        var r = null
         for each (var arg in args)
         {
-          text = arg(text, state)
-          if (!text) return text
+          r = arg(text, state)
+          if (!r) return r
+          text  = r[0]
+          state = r[1]
         }
-        return text
+        return [text, state]
       }
     }
     
+    // hook: function(buffer, state) { return state }
     var Capture = function(func, hook)
     {
       return function(text, state)
       {
         var r = func(text, state)
-        if (r) hook(text.substr(0, text.length - r.length), state)
+        if (r) {
+          var t = r[0]
+          var s = r[1]
+          return [t, hook(text.substr(0, text.length - t.length), s)]
+        }
         return r
       }
     }
+
+    // hook: function(state1) { return state2 }
+    var Before = function(func, hook)
+    {
+      return function(text, state) {
+        return func(text, hook(state))
+      }
+    }
     
-    return grammar(All, Any, Capture, Char, Optional, Y)
+    // hook: function(state1, state2) { return state3 }
+    var After = function(func, hook)
+    {
+      return function(text, state) {
+        var r = func(text, state)
+        return [r[0], hook(state, r[1])]
+      }
+    }
+    
+    return grammar(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After)
   }
     
   
