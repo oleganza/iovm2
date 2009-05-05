@@ -19,34 +19,60 @@
     
     var numbers     = Y(function(ns){ return All(number, optspace, Optional(ns)) })
     
-    var openbracket  = Char("[")
-    var closebracket = Char("]")
+    var lbracket = Char("[")
+    var rbracket = Char("]")
     
-    var sequence = function(start, item, separator, end) { 
+    var Sequence = function(start, item, separator, end) { 
       return Y(function(seq) {
-        return All(start, Optional(Any(All(item, separator, seq), item)), end)
+        return All(start, Optional(Any(All(seq, separator, item), item)), end)
       })
     }
     
     var list = Y(function(lst){
       var word = Any(number/*, string, identifier */)
       var item = Any(word, lst)
-      return sequence(openbracket, item, Char(","), closebracket)
+      return Sequence(lbracket, item, Char(","), rbracket)
     })
     
     var numberslist = All(optspace, numbers, optspace)
     var singlelist  = All(optspace, list, optspace)
     
-    return numberslist
+    var lispcap = function(buffer, state){ state.lists.push(buffer) }
+    
+    var lisp = Y(function(lst){
+      return Capture(Sequence(Char("["), Any(lst, Char("qwertyuiopasdfghjklzxcvbn")), Char(","), Char("]")), lispcap)
+    })
+    
+    /*
+    
+    term    = "abcdef..."
+    seq     = (exp "," seq) | exp
+    optseq  = seq | ""
+    list    = "[" optseq "]"
+    exp     = list | term
+    */
+    
+    return lisp
   }
   
-  
-  var Text = " 123 +12321 -42.34"
-  
-  
-  var TestGrammar = function(Grammar, Parser, text)
+  var SimpleLisp = function(All, Any, Capture, Char, Optional, Y)
   {
-    var parser = Parser(Grammar)
+    return Y(function(exp){
+      var captureseq = function(buffer, state){ state.lists.push(buffer)  }
+      var seq = Y(function(seq){
+        return Capture(Any(All(exp, Char(","), seq), exp), captureseq)
+      })
+      var optseq = Optional(seq)
+      var list   = All(Char("["), optseq, Char("]"))
+      return Any(list, Char("qwertyuiopasdfghjklzxcvbn"))
+    })
+  }
+  
+  var Text = "[[a],[b],[c],[d]]"
+  
+  var TestGrammar = function(Parser)
+  {
+    var parser = Parser(SimpleLisp)
     
     var state = {
       numbers: [],
@@ -54,7 +80,7 @@
       list:    null
     }
     
-    var r = parser(text + " ", state) // tail space is intended
+    var r = parser(Text + " ", state) // tail space is intended
     
     if(!r)
       print("Syntax error!")
@@ -140,9 +166,10 @@
   
   function main()
   {
-    print(TestGrammar(Grammar, Parser, Text))
+    print(TestGrammar(Parser))
   }
   
+  // Pretty print
   
   Array.prototype.toString = 
   Object.prototype.toString = function() {
