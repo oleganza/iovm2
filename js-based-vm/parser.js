@@ -1,130 +1,8 @@
 #!/usr/bin/env js
-
-
-// parses code into AST of messages
-// In:  Lobby print[hello world[1,2,""], a = 1]
-/* Out: [
-          {name: "Lobby", args:[]}, 
-          {
-            name: "print", 
-            args: [ 
-              [{name: "hello", args:[]}, {name:"world", args:[ [1],[2],[""] ]}],
-              [{name: "q=", args: [ [1] ]}]
-            ]
-          }                        
-        ]
-*/
 (function(){
   
-  /*
-    main       := optspace expression
-    expression := message optspace expression
-    message    := number | string | method | ";" | "\n" | ""
-    
-    number     := signed | unsigned
-    signed     := sign optspace unsigned
-    sign       := "+" | "-"
-    unsigned   := float | integer
-    integer    := digit integer | digit
-    float      := integer "." integer
-    digit      := 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-    
-    string     := string1 | string2
-    string1    := "'" text1 "'"
-    string2    := '"' text2 '"'
-    text1      := chunk1 text1
-    text2      := chunk2 text2
-    chunk1     := word1 | escape1
-    chunk2     := word2 | escape2
-    
-    
-    space      := " " | "\t" | "\v"
-    optspace   := spaces | ""
-    spaces     := space optspace
-    
-    var space    = One(" ", "\t", "\v")
-    var optspace = Optional(spaces)
-    var spaces   = All(space, optspace)
-    
-  */
-  
-  
-  var result = (function(text){
-    
-    // The Y Combinator
-    var Y=function (gen) {
-    return function(f) {return f(f)}(
-     function(f) {
-      return gen(function() {return f(f).apply(null, arguments)})})}
-    
-    function ToArray(args)
-    {
-      var arr = []
-      for (var i = 0; i < args.length; i++) arr.push(args[i])
-      return arr
-    }
-    
-    function Optional(func)
-    {
-      return function(text, state) {
-        return func(text, state) || text
-      }
-    }
-    
-    function Char(string)
-    {
-      return function(text, state) {
-        return ((string.indexOf(text.charAt(0)) > -1) ? text.substr(1) : null)
-      }
-    }
-    
-    function Any()
-    {
-      var args = ToArray(arguments)
-      return function(text, state) {
-        var r = null
-        for each (var arg in args)
-        {
-          r = arg(text, state)
-          if (r) return r
-        }
-        return null
-      }
-    }
-    
-    function All()
-    {
-      var args = ToArray(arguments)
-      return function(text, state) {
-        for each (var arg in args)
-        {
-          text = arg(text, state)
-          if (!text) return text
-        }
-        return text
-      }
-    }
-    
-    function Capture(func, hook)
-    {
-      return function(text, state)
-      {
-        var r = func(text, state)
-        if (r) hook(text.substr(0, text.length - r.length), state)
-        return r
-      }
-    }
-    
-    /*
-    sign       := "+" | "-"
-    digit      := 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-    integer    := digit integer | digit
-    float      := integer "." integer
-    unsigned   := float | integer
-    signed     := sign optspace unsigned
-    number     := signed | unsigned
-    */
-
+  var Grammar = function(All, Any, Capture, Char, Optional, Y)
+  {
     var spacechar   = Char(" \t")
     var optspace    = Y(function(os){ return Optional(All(spacechar, os)) })
     var space       = All(spacechar, optspace)
@@ -140,8 +18,7 @@
     })
     
     var numbers     = Y(function(ns){ return All(number, optspace, Optional(ns)) })
-    var numberslist = All(optspace, numbers, optspace)
-
+    
     var openbracket  = Char("[")
     var closebracket = Char("]")
     
@@ -157,10 +34,19 @@
       return sequence(openbracket, item, Char(","), closebracket)
     })
     
-    print(sequence)
-    print(list)
+    var numberslist = All(optspace, numbers, optspace)
+    var singlelist  = All(optspace, list, optspace)
     
-    var scanner = All(optspace, list, optspace)
+    return numberslist
+  }
+  
+  
+  var Text = " 123 +12321 -42.34"
+  
+  
+  var TestGrammar = function(Grammar, Parser, text)
+  {
+    var parser = Parser(Grammar)
     
     var state = {
       numbers: [],
@@ -168,74 +54,94 @@
       list:    null
     }
     
-    var r = scanner(text + " ", state) // tail space is intended
+    var r = parser(text + " ", state) // tail space is intended
+    
     if(!r)
       print("Syntax error!")
     else
       print("Result is '"+ r +"'")
     
     return state
+  }
+  
+  
+  var Parser = function(grammar)
+  {
+    var toArray = function(args)
+    {
+      var arr = []
+      for (var i = 0; i < args.length; i++) arr.push(args[i])
+      return arr
+    }
     
-  })(" [ [ 1 ], 2 ] ")
+    // The Y Combinator
+    var Y = function (gen) {
+      return (function(f) {return f(f)})(
+        function(f) {
+          return gen(function() {return f(f).apply(null, arguments)})
+        }
+      )
+    }
+    
+    var Optional = function(func)
+    {
+      return function(text, state) {
+        return func(text, state) || text
+      }
+    }
+    
+    var Char = function(string)
+    {
+      return function(text, state) {
+        return ((string.indexOf(text.charAt(0)) > -1) ? text.substr(1) : null)
+      }
+    }
+    
+    var Any = function()
+    {
+      var args = toArray(arguments)
+      return function(text, state) {
+        var r = null
+        for each (var arg in args)
+        {
+          r = arg(text, state)
+          if (r) return r
+        }
+        return null
+      }
+    }
+    
+    var All = function()
+    {
+      var args = toArray(arguments)
+      return function(text, state) {
+        for each (var arg in args)
+        {
+          text = arg(text, state)
+          if (!text) return text
+        }
+        return text
+      }
+    }
+    
+    var Capture = function(func, hook)
+    {
+      return function(text, state)
+      {
+        var r = func(text, state)
+        if (r) hook(text.substr(0, text.length - r.length), state)
+        return r
+      }
+    }
+    
+    return grammar(All, Any, Capture, Char, Optional, Y)
+  }
+    
   
   function main()
   {
-    print(result)
+    print(TestGrammar(Grammar, Parser, Text))
   }
-  
-  var Parse = function(text)
-  {
-    var stack  = []
-    var ast    = []
-    var cursor = null
-    var line   = 1
-    
-    var Error = function(msg) {
-      throw ("Parse error at line " + line + ": " + msg)
-    }
-    
-    function TODO(msg)        { Error("TODO: " + msg) }
-    function Unexpected(char) { Error("Unexpected character '" + char + "'") }
-    
-    var Method = function(char) {
-      if (char.match(/\d/)) {
-        TODO("numbers are not supported")
-      } else if (char.match(/"'/)) {
-        TODO("strings are not supported")
-      } else if (char.match(/\w/)) {
-        cursor = Method
-      } else {
-        Unexpected(char)
-      }
-      cursor(char)
-    }
-    
-    var Expression = function(char) {
-      if (char.match(/\d/)) {
-        TODO("numbers are not supported")
-      } else if (char.match(/"'/)) {
-        TODO("strings are not supported")
-      } else if (char.match(/\w/)) {
-        cursor = Method
-      } else {
-        Unexpected(char)
-      }
-      cursor(char)
-    }
-    
-    cursor = Expression
-    for (var i = 0; i < text.length; i++)
-    {
-      cursor(text.charAt(i))
-      if (text.charAt(i) == "\n") line += 1
-    }
-    
-    return ast
-  }
-  
-
-  
-  // Aux
   
   
   Array.prototype.toString = 
@@ -273,17 +179,6 @@
   
   
   main()
-  
-  // print([
-  //           {name: "Lobby", args:[]}, 
-  //           {
-  //             name: "print", 
-  //             args: [ 
-  //               [{name: "hello", args:[]}, {name:"world", args:[ [1],[2],[""] ]}],
-  //               [{name: "q=", args: [ [1] ]}]
-  //             ]
-  //           }                        
-  //         ])
   
 })()
 
