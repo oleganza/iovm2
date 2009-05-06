@@ -1,0 +1,10 @@
+
+- Test JSBNF parser with JSON grammar
+- Io grammar in JSBNF
+- Interpreter within AS3
+  - class access
+  - object creation
+  - property access
+  - method invocation
+- Bytecode tracer & optimizer
+
