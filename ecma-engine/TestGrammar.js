@@ -1,4 +1,4 @@
-var SimpleLisp = function(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After)
+var SimpleLisp = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, Terminator, Before, After)
 {
   var item = Y(function(item){
     
@@ -13,10 +13,4 @@ var SimpleLisp = function(All, Any, Capture, Char, Optional, Y, EOF, Terminator,
     return After(Any(list, char), function(s1, s2) { return s1.concat([s2]) })
   })
   return All(item, EOF)
-}
-
-
-var StringGrammar = function(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After)
-{
-  
 }

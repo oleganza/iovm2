@@ -30,12 +30,25 @@ var Parser = function(grammar)
   var Terminator = function(text, state) { // terminates scanner (possibly in the middle of the text)
     return ["", state]
   }
-      
-  var Char = function(string)
+  
+  function isFirstByteInAlphabet(text, alphabet)
+  {
+    return (text.length > 0 && alphabet.indexOf(text.charAt(0)) > -1)
+  }
+  
+  var Char = function(alphabet)
   {
     return function(text, state) {
       // TODO: count line number on each text.substr(1)
-      return ((text.length > 0 && string.indexOf(text.charAt(0)) > -1) ? [text.substr(1), state] : null)
+      return (isFirstByteInAlphabet(text, alphabet) ? [text.substr(1), state] : null)
+    }
+  }
+  
+  var NotChar = function(string)
+  {
+    return function(text, state) {
+      // TODO: count line number on each text.substr(1)
+      return (isFirstByteInAlphabet(text, alphabet) ? null : [text.substr(1), state])
     }
   }
   
@@ -101,7 +114,7 @@ var Parser = function(grammar)
     }
   }
   
-  return grammar(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After)
+  return grammar(All, Any, Capture, Char, NotChar, Optional, Y, EOF, Terminator, Before, After)
 }
 
 var Parse = function(parser, text, state)

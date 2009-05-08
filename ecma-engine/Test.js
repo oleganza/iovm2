@@ -1,7 +1,7 @@
 #!/usr/bin/env js
 load("Util.js", "Parser.js", "TestGrammar.js", "JSONGrammar.js", "IonGrammar.js")
 
-var test = Parser(function(All, Any, Capture, Char, Optional, Y, EOF, Terminator, Before, After) {
+var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, Terminator, Before, After) {
   return function(verify)
   {
     (function(verify){
@@ -10,10 +10,15 @@ var test = Parser(function(All, Any, Capture, Char, Optional, Y, EOF, Terminator
       verify("All",          All(Char("a"),Char("b"),EOF),  "ab")
       verify("Any 1",        Any(Char("a"),Char("b"),EOF),  "a")
       verify("Any 2",        Any(Char("a"),Char("b"),EOF),  "b")
-      verify("Failing test", EOF,            "Quick fox")      
+      verify("(F) This test should fail with false result", EOF, "Quick fox")
+      verify("(E) This test should fail with exception", function(){ throw "test exception thrown!" }, "Quick fox")
     })(function(title, grammar, text){
       return verify(title, grammar, text, 42, 42)
     })
+    
+    verify("Single quoted string: empty",  Parser(StringGrammar), "''",   "", "")
+    verify("Single quoted string: simple", Parser(StringGrammar), "'ab'", "", "ab")
+    
   }
 })
 
