@@ -10,6 +10,8 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       verify("Char 1",       Char("abc"),    "a")
       verify("Char 2",       Char("abc"),    "b")
       verify("Char 3",       Char("abc"),    "c")
+      verify("NotChar 1",    NotChar("abc"),    "x")
+      verify("NotChar 2",    NotChar("abc"),    "y")
       verify("All",          All(Char("a"),Char("b"),EOF),  "ab")
       verify("Any 1",        Any(Char("a"),Char("b"),EOF),  "a")
       verify("Any 2",        Any(Char("a"),Char("b"),EOF),  "b")

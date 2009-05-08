@@ -44,7 +44,7 @@ var Parser = function(grammar)
     }
   }
   
-  var NotChar = function(string)
+  var NotChar = function(alphabet)
   {
     return function(text, state) {
       // TODO: count line number on each text.substr(1)
