@@ -27,8 +27,9 @@ Basically, object does not have slots anymore. It is just a collection of method
 
 callMethod["name"]           #=> ""
 callMethod["name=", "Oleg"]  #=> "Oleg"
-getMethod["name"]            #=> __get_name
-getMethod["name="]           #=> __set_name
+getMethod == getSlot
+getMethod["name"]            #=> method[getSlot("_name")]
+getMethod["name="]           #=> method[x, setSlot("_name", x)]
 setMethod["name",  method[_name]]
 setMethod["name=", method[n, _name = n]]
 
