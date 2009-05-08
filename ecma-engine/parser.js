@@ -106,5 +106,6 @@ var Parser = function(grammar)
 
 var Parse = function(parser, text, state)
 {
-  
+  var r = parser(text, state)
+  return r && r[1]
 }
