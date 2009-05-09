@@ -16,14 +16,16 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       verify("All",          All(Char("a"),Char("b"),EOF),  "ab")
       verify("Any 1",        Any(Char("a"),Char("b"),EOF),  "a")
       verify("Any 2",        Any(Char("a"),Char("b"),EOF),  "b")
-      verify("(F) This test should fail with false result", EOF, "Quick fox")
-      verify("(E) This test should fail with exception", function(){ throw "test exception thrown!" }, "Quick fox")
     })(function(title, grammar, text){
       return verify(title, grammar, text, 42, 42)
     })
     
-    verify("Single quoted string: empty",  Parser(StringGrammar), "''",   "", "")
-    verify("Single quoted string: simple", Parser(StringGrammar), "'ab'", "", "ab")
+    verify("Single quoted string (empty)",  Parser(StringGrammar), "''",   "", "")
+    verify("Single quoted string (x)", Parser(StringGrammar), "'x'", "", "x")
+    verify("Single quoted string (xy)", Parser(StringGrammar), "'xy'", "", "xy")
+    
+    verify("(F) This test should fail with false result", EOF, "Quick fox",1,1)
+    verify("(E) This test should fail with exception", function(){ throw "test exception thrown!" }, "Quick fox",1,1)
     
   }
 })
