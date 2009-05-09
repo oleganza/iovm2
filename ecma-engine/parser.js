@@ -31,24 +31,17 @@ var Parser = function(grammar)
     return ["", state]
   }
   
-  function isFirstByteInAlphabet(text, alphabet)
-  {
-    return (text.length > 0 && alphabet.indexOf(text.charAt(0)) > -1)
-  }
-  
   var Char = function(alphabet)
   {
     return function(text, state) {
-      // TODO: count line number on each text.substr(1)
-      return (isFirstByteInAlphabet(text, alphabet) ? [text.substr(1), state] : null)
+      return ((text.length > 0 && alphabet.indexOf(text.charAt(0)) > -1) ? [text.substr(1), state] : null)
     }
   }
   
   var NotChar = function(alphabet)
   {
     return function(text, state) {
-      // TODO: count line number on each text.substr(1)
-      return (isFirstByteInAlphabet(text, alphabet) ? null : [text.substr(1), state])
+      return ((text.length > 0 && alphabet.indexOf(text.charAt(0)) == -1) ? [text.substr(1), state] : null)
     }
   }
   
