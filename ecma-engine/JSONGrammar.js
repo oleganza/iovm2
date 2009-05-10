@@ -58,9 +58,18 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
     var ObjectGrammar = (function()
     {
       var init = function(s) { return {} }
+      var beforeTuple = function(obj)        { return [] }
+      var afterTuple  = function(obj, tuple) { obj[tuple[0]] = tuple[1]; return obj }
+      var afterKey    = function(tuple, str) { tuple.push(str); return tuple }
+      var afterValue  = function(tuple, val) { tuple.push(val); return tuple }
       
       var seq = Y(function(seq){
-        var item = All(StringGrammar, optSpace, Char(":"), optSpace, Value)
+        var item = All(After(StringGrammar, afterKey), 
+                       optSpace, 
+                       Char(":"), 
+                       optSpace, 
+                       After(Value, afterValue))
+        item = After(Before(item, beforeTuple), afterTuple)
         return Any(All(item, optSpace, Char(","), optSpace, seq), item)
       })
       

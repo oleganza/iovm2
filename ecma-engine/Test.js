@@ -20,26 +20,32 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       return verify(title, grammar, text, 42, 42)
     })
     
-    verify("Single quoted string (empty)",  Parser(StringGrammar), "''",     "", "")
-    verify("Single quoted string (x)",      Parser(StringGrammar), "'x'",    "", "x")
-    verify("Single quoted string (xy)",     Parser(StringGrammar), "'xy'",   "", "xy")
-    verify("Single quoted string (x\\y)",   Parser(StringGrammar), "'x\\y'", "", "xy")
-    
-    var _ = (function(t){ 
-      t("''");    t('""') 
-      t("'\\''"); t('"\\""')
-      t("'\\\'abc def \\nghijk \\\\\\\"lmnopq'")
-      t("'\\n\\b\\t\\r\\f\\'\\\"'")
-      t('"\\n\\b\\t\\r\\f\\\'\\""')
-    })(function(result){
-      verify("StringGrammar " + result, Parser(StringGrammar), result, "", eval(result))
+    var _ = (function(verificator){
+      
+      return [
+        (function(t){ 
+          t("''");    t('""') 
+          t("'\\''"); t('"\\""')
+          t("'\\\'abc def \\nghijk \\\\\\\"lmnopq'")
+          t("'\\n\\b\\t\\r\\f\\'\\\"'")
+          t('"\\n\\b\\t\\r\\f\\\'\\""')
+        })(verificator("StringGrammar", StringGrammar, "")),
+        (function(t){ 
+          t("{}")
+          t("{'a':'b'}")
+        })(verificator("ObjectGrammar", ObjectGrammar, {})),
+      ]
+      
+    })(function(title, grammar, state) {
+      return function(result){
+        verify(title + " " + result, 
+               Parser(grammar), 
+               result, 
+               state, 
+               eval("(" + result + ")"))
+      }
     })
     
-    _ = (function(t){ 
-      t("{'a':1}")
-    })(function(result){
-      verify("ObjectGrammar " + result, Parser(ObjectGrammar), result, {}, {})
-    })
     
     verify("(F) This test should fail with false result", EOF, "Quick fox",1,1)
     verify("(E) This test should fail with exception", function(){ throw "test exception thrown!" }, "Quick fox",1,1)
@@ -117,9 +123,6 @@ TestSuite.assertEquals("[] == []", [], [])
 TestSuite.assertEquals("[[],1] == [[],1]", [[],1], [[],1])
 TestSuite.assertEquals("{} == {}", {}, {})
 TestSuite.assertEquals("{'a':1} == {a:1}", {'a':1}, {a:1})
-
-print(Parse(Parser(ObjectGrammar), "{'a':{}}", {}))
-quit()
 
 test(function(title, grammar, text, state, result){
   TestSuite.assert(title, function(){
