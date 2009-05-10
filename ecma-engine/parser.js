@@ -53,7 +53,10 @@ var Parser = function(grammar)
       for each (var arg in args)
       {
         r = arg(text, state)
-        if (r) return r
+        if (r) 
+        {
+          return r
+        }
       }
       return null
     }

@@ -55,7 +55,7 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       return Any(SingleQuotedString, DoubleQuotedString)
     })()
     
-    var ObjectGrammar = function()
+    var ObjectGrammar = (function()
     {
       var init = function(s) { return {} }
       
@@ -64,10 +64,12 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
         return Any(All(item, optSpace, Char(","), optSpace, seq), item)
       })
       
-      Before(All(
-        Char("{"), optSpace, Optional(seq), optSpace, Optional(","), optSpace, Char("}")
+      return Before(All(
+        Char("{"), 
+        optSpace, Optional(seq), optSpace, Optional(Char(",")), optSpace,
+        Char("}")
       ), init)
-    }
+    })()
     
     // TODO: numbers, arrays, true/false/null
     return Any(StringGrammar, ObjectGrammar)

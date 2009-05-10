@@ -118,6 +118,9 @@ TestSuite.assertEquals("[[],1] == [[],1]", [[],1], [[],1])
 TestSuite.assertEquals("{} == {}", {}, {})
 TestSuite.assertEquals("{'a':1} == {a:1}", {'a':1}, {a:1})
 
+print(Parse(Parser(ObjectGrammar), "{'a':{}}", {}))
+quit()
+
 test(function(title, grammar, text, state, result){
   TestSuite.assert(title, function(){
     return TestSuite.compare(Parse(grammar, text, state), result)
