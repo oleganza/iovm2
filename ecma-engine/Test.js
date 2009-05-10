@@ -41,7 +41,7 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
           t("[]"); t("[ \t\n]"); t("[,]"); t("[ , ]");
           t("[false]")
           t("[[], {}, 'a', true, false]")
-          t("[[], {}, 'a', [[true]], false]")
+          t("[[], {}, 'a', [[true],], false,]")
         })(verificator("ArrayGrammar", ArrayGrammar, [])),
         
         (function(t){ 
@@ -49,6 +49,12 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
           t("false")
           t("null")
         })(verificator("KeywordGrammar", KeywordGrammar, null)),
+        
+        (function(t){ 
+          t("1"); t("+ 1"); t("- 1");
+          t("0.123e23")
+        })(verificator("NumberGrammar", NumberGrammar, null)),
+        
       ]
       
     })(function(title, grammar, state) {
@@ -138,6 +144,9 @@ TestSuite.assertEquals("[] == []", [], [])
 TestSuite.assertEquals("[[],1] == [[],1]", [[],1], [[],1])
 TestSuite.assertEquals("{} == {}", {}, {})
 TestSuite.assertEquals("{'a':1} == {a:1}", {'a':1}, {a:1})
+
+// print(Parse(Parser(NumberGrammar), "12", 0))
+// quit()
 
 test(function(title, grammar, text, state, result){
   TestSuite.assert(title, function(){

@@ -106,10 +106,30 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       ), init)
     })()
     
+    var NumberGrammar = (function(){
+      
+      var zero    = Char("0")
+      var digit19 = Char("123456789")
+      var digit   = Char("1234567890")
+      var sign    = Char("+-")
+      var exp     = Char("eE")
+      
+      var digits = Y(function(digits){
+        return Any(All(digit, digits), digit)
+      })
+      
+      var capture = function(buf, s) { return eval("(" + buf + ")") }
+      
+      var integer  = Any(zero, All(digit19, Optional(digits)))
+      var exponent = All(exp, Optional(sign), digits)
+      var floating = All(Char("."), digits, Optional(exponent))
+      var unsigned = All(integer, Optional(floating))
+      
+      return Capture(All(Optional(sign), optSpace, unsigned), capture)
+      
+    })()
     
-    
-    // TODO: numbers
-    return Any(StringGrammar, ObjectGrammar, ArrayGrammar, Keyword)
+    return Any(StringGrammar, ObjectGrammar, ArrayGrammar, Keyword, NumberGrammar)
     
   }) 
     
