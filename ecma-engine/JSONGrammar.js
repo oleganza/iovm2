@@ -106,7 +106,9 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       ), init)
     })()
     
-    // TODO: numbers, arrays
+    
+    
+    // TODO: numbers
     return Any(StringGrammar, ObjectGrammar, ArrayGrammar, Keyword)
     
   }) 
