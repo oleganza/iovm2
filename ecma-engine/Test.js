@@ -25,12 +25,16 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
     verify("Single quoted string (xy)",     Parser(StringGrammar), "'xy'",   "", "xy")
     verify("Single quoted string (x\\y)",   Parser(StringGrammar), "'x\\y'", "", "xy")
     
-    var t = function(result){
+    var _ = (function(t){ 
+      t("''");    t('""') 
+      t("'\\''"); t('"\\""')
+      t("'\\\'abc def \\nghijk \\\\\\\"lmnopq'")
+      t("'\\n\\b\\t\\r\\f\\'\\\"'")
+      t('"\\n\\b\\t\\r\\f\\\'\\""')
+    })(function(result){
       verify("StringGrammar " + result, Parser(StringGrammar), result, "", eval(result))
-    }
+    })
     
-    t("'\\\''")
-    t("'\\\'abc def \\nghijk lmnopq'")
     
     verify("(F) This test should fail with false result", EOF, "Quick fox",1,1)
     verify("(E) This test should fail with exception", function(){ throw "test exception thrown!" }, "Quick fox",1,1)
