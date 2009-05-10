@@ -34,8 +34,15 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
         (function(t){ 
           t("{  }")
           t("{ 'a' : 'b' }")
-          t("{'a' :{'b': {\t'c'\n:\t'd'},'e':{'f':'g'}},\r'h':\n{}}")
+          t("{'a' :{'b': {\t'c'\n:\tnull},'e':{'f':false}},\r'h':\n{}}")
         })(verificator("ObjectGrammar", ObjectGrammar, {})),
+        
+        (function(t){ 
+          t("[]"); t("[ \t\n]"); t("[,]"); t("[ , ]");
+          t("[false]")
+          t("[[], {}, 'a', true, false]")
+          t("[[], {}, 'a', [[true]], false]")
+        })(verificator("ArrayGrammar", ArrayGrammar, [])),
         
         (function(t){ 
           t("true")

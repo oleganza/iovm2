@@ -92,7 +92,7 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
     var ArrayGrammar = (function()
     {
       var init      = function(s)        { return [] }
-      var afterItem = function(arr, val) { arr.push(val); return arr }
+      var afterItem = function(arr, val) { return arr.concat([val])  }
       
       var seq = Y(function(seq){
         var item = After(Value, afterItem)
