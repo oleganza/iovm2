@@ -30,9 +30,11 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
           t("'\\n\\b\\t\\r\\f\\'\\\"'")
           t('"\\n\\b\\t\\r\\f\\\'\\""')
         })(verificator("StringGrammar", StringGrammar, "")),
+        
         (function(t){ 
-          t("{}")
-          t("{'a':'b'}")
+          t("{  }")
+          t("{ 'a' : 'b' }")
+          t("{'a' :{'b': {\t'c'\n:\t'd'},'e':{'f':'g'}},\r'h':\n{}}")
         })(verificator("ObjectGrammar", ObjectGrammar, {})),
       ]
       

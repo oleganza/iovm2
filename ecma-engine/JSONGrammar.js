@@ -3,7 +3,7 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
   return Y(function(Value){
     
     var lineSpace     = Char(" \t")
-    var space         = Any(Char("\n\r"))
+    var space         = Char(" \t\n\r")
     var optLineSpace  = Optional(lineSpace)
     var optSpace      = Optional(space)
     
