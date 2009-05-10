@@ -7,6 +7,15 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
     var optLineSpace  = Optional(lineSpace)
     var optSpace      = Optional(space)
     
+    var Constant = function(name)
+    {
+      return function(text, state) {
+        return ((text.substr(0, name.length) == name) ? [text.substr(name.length), state] : null)
+      }
+    }
+    keywords = {'true':true, 'false':false, 'null':null}
+    var Keyword = Capture(Any(Constant("true"), Constant("false"), Constant("null")), function(buf, state){ return keywords[buf] })
+    
     var StringGrammar = (function()
     {
       var controlCharMap = {
@@ -80,14 +89,15 @@ var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
       ), init)
     })()
     
+    
     // TODO: numbers, arrays, true/false/null
-    return Any(StringGrammar, ObjectGrammar)
+    return Any(StringGrammar, ObjectGrammar, Keyword)
     
   }) 
     
 }
 
-var BooleanGrammar = JSONGrammar
+var KeywordGrammar = JSONGrammar
 var NumberGrammar  = JSONGrammar
 var StringGrammar  = JSONGrammar
 var ArrayGrammar   = JSONGrammar

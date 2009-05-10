@@ -36,6 +36,12 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
           t("{ 'a' : 'b' }")
           t("{'a' :{'b': {\t'c'\n:\t'd'},'e':{'f':'g'}},\r'h':\n{}}")
         })(verificator("ObjectGrammar", ObjectGrammar, {})),
+        
+        (function(t){ 
+          t("true")
+          t("false")
+          t("null")
+        })(verificator("KeywordGrammar", KeywordGrammar, null)),
       ]
       
     })(function(title, grammar, state) {
