@@ -43,7 +43,7 @@ var counter = {passed:0, failures:0}
 test(function(title, grammar, text, state, result){
   try {
     var r = (Parse(grammar, text, state) == result)
-    if (r)
+    if (r || (! r && title.indexOf("(F)") == 0))
     {
       counter.passed++
       //print("  " + title)
@@ -54,8 +54,13 @@ test(function(title, grammar, text, state, result){
       print("F " + title + ": result is " + r)
     }
   } catch(e) {
-    counter.failures++
-    print("E " + title + ": " + e)
+    if (title.indexOf("(E)") == 0)
+    {
+      counter.passed++
+    } else {
+      counter.failures++
+      print("E " + title + ": " + e)
+    }
   }
 })
 
