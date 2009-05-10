@@ -52,7 +52,8 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
         
         (function(t){ 
           t("1"); t("+ 1"); t("- 1");
-          t("0.123e23")
+          t("0.123e23"); t("-0.123e-23")
+          
         })(verificator("NumberGrammar", NumberGrammar, null)),
         
       ]
