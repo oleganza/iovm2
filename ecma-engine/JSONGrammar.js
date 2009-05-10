@@ -1,3 +1,10 @@
+/*
+What we've learned:
+- grammars could be transformed to fit simpler parsers
+- rules order and grouping matters
+- Y combinator rocks
+*/
+
 var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, Terminator, Before, After)
 {
   return Y(function(Value){
