@@ -41,7 +41,7 @@ var test = Parser(function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, T
           t("[]"); t("[ \t\n]"); t("[,]"); t("[ , ]");
           t("[false]")
           t("[[], {}, 'a', true, false]")
-          t("[[], {}, 'a', [[true],], false,]")
+          t("[[], {}, 'a',   [\t\t[true],], false,]")
         })(verificator("ArrayGrammar", ArrayGrammar, [])),
         
         (function(t){ 

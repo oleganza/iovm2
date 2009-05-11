@@ -28,8 +28,8 @@ Basically, object does not have slots anymore. It is just a collection of method
 callMethod["name"]           #=> ""
 callMethod["name=", "Oleg"]  #=> "Oleg"
 getMethod == getSlot
-getMethod["name"]            #=> method[getSlot("_name")]
-getMethod["name="]           #=> method[x, setSlot("_name", x)]
+getMethod["name"]            #=> method[getSlot["_name"]]
+getMethod["name="]           #=> method[x, setSlot["_name", x]]
 setMethod["name",  method[_name]]
 setMethod["name=", method[n, _name = n]]
 
@@ -48,4 +48,40 @@ Object setMethod["def",
     ]
   ]
 ]
+
+
+    JavaScript            Ion                       Ion internals
+    
+    obj.prop         =>   obj getSlot["prop"]
+    obj.prop = x     =>   obj setSlot["prop"]
+    obj.prop()       =>   obj prop             =>   callMethod["prop"]
+    obj.setProp(x)   =>   obj prop = x         =>   callMethod["prop=", x]
+
+
+
+setMethod["init", method[
+  self ivar = 1
+  lvar = 2
+]]
+
+def["initialize",
+  self ivar = 1
+  lvar = 2
+]
+
+
+Named arguments:
+- optional => you can't change arguments order later
+- should be mergeable with dictionaries
+
+method[options,
+  options = options or[{"a": 1, "b": 2}]
+]
+
+list map[x, x + 2]
+list mapWithBlock[block[x, x + 2]]
+
+
+
+
 

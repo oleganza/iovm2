@@ -7,10 +7,18 @@ What we've learned:
 
 var JSONGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, Terminator, Before, After)
 {
+  
+  var Plus = function(rule)
+  {
+    return Y(function(seq){
+      return Any(All(rule, seq), rule)
+    })
+  }
+  
   return Y(function(Value){
     
-    var lineSpace     = Char(" \t")
-    var space         = Char(" \t\n\r")
+    var lineSpace     = Plus(Char(" \t"))
+    var space         = Plus(Char(" \t\n\r"))
     var optLineSpace  = Optional(lineSpace)
     var optSpace      = Optional(space)
     
