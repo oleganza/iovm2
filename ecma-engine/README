@@ -64,8 +64,13 @@ setMethod["init", method[
   lvar = 2
 ]]
 
-def["initialize",
+def initialize[
   self ivar = 1
+  lvar = 2
+]
+
+def initialize[
+  @ivar = 1
   lvar = 2
 ]
 
