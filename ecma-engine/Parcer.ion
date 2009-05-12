@@ -1,0 +1,5 @@
+Object clone do[
+  setMethod["Optional", method[blk,
+    blk call[]
+  ]]
+]
