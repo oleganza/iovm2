@@ -1,4 +1,10 @@
 Grammar clone do [
+  def Constant[name,
+    block[text, state,
+      text substring[0, name size] equals[name] 
+      ((text.substr(0, name.length) == name) ? [text.substr(name.length), state] : null)
+    ]
+  ]
   KeywordRule
   Main = Any[KeywordRule, NumberRule, StringRule, ObjectRule, ArrayRule]
 ]
