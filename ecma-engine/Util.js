@@ -30,3 +30,15 @@ Object.prototype.toString = function() {
   }
   return s
 }
+
+var O = {
+  create: function() {
+    var C = function(){}
+    C.prototype = this
+    var obj = new C()
+    if (arguments.length < 1) return obj
+    var last = arguments[arguments.length - 1]
+    if (typeof(last) === "function") last.apply(obj, arguments)
+    return obj
+  }
+}
