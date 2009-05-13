@@ -32,7 +32,6 @@ Macros := Object clone do(
       readSlot
     )
   )
-
   activate := message(
     ifMessageIsBuiltin(
       activateBuiltin, 
@@ -43,7 +42,6 @@ Macros := Object clone do(
     copyValueToTarget;        
     nextMessage
   )
-
   pushState := message(
     pushMessage
     pushChainTarget
