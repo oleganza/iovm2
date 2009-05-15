@@ -3,9 +3,23 @@
 load("Util.js")
 
 var VM = (function(){
+
+  var SystemType = O.create(function(){
+  })
   
-  var Coro = O.create(function(){
+  var MessageType = SystemType.create()
+  var BuiltinType = SystemType.create()
+  var BlockType   = SystemType.create()
+
+  var ObjectProto = O.create(function(){
+    this.sysType = null
+    this.protos  = []
+    this.slots   = {}
+  })
+    
+  var Coroutine = O.create(function(){
     this.stack = null
+    this.state = null
   })
   
   var State = O.create(function(){
@@ -13,7 +27,7 @@ var VM = (function(){
     this.chainTarget = null // target for a chain of messages (equals to target in the beginning of the chain or after ";")
     this.target      = null // current target for a message
     this.locals      = null // "call context" - object who sent a message to the "target"
-    this.value       = null  // current slot value (set by lookupSlot)
+    this.value       = null // current slot value (set by lookupSlot)
   })
   
   var Message = O.create(function(){
@@ -21,20 +35,32 @@ var VM = (function(){
   })
   
   var VM = O.create(function(){
-    this.coro = null
-    this.setCoro = function(coro){
-      this.coro = coro
+    var coroutine = null
+    var state     = null
+    var stack     = null
+    
+    this.setCoroutine = function(coro){
+      coroutine = coro
+      state     = coro.state
+      stack     = coro.stack
     }
+    
     this.run = function(){
+      if (!coroutine) throw "Coroutine is required"
+      if (!state) throw "Coroutine state is required"
+      if (!stack) throw "Coroutine stack is required"
+      
       while (true) {
         // main loop till coroutine returns
+        
+        if (state.message == null)
       }
     }
   })
   
-  VM.Coro    = Coro
-  VM.State   = State
-  VM.Message = Message
+  VM.Coroutine = Coroutine
+  VM.State     = State
+  VM.Message   = Message
   
   return VM
 })()
@@ -51,7 +77,7 @@ var state = vm.State.create(function(){
   
 })
 
-var coro = vm.Coro.create(function(){
+var coro = vm.Coroutine.create(function(){
   this.stack = []
   this.state = state
 })
