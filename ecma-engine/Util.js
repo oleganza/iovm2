@@ -62,31 +62,34 @@ var O = {
 //
 // Test
 //
+if (false){
+  (function(){
+    var Animal = O.create(function(){
+      this.type = "Animal prototype"
+      this.init = function(n){
+        this.type = "New Animal " + n
+      }
+    })
 
-var Animal = O.create(function(){
-  this.type = "Animal prototype"
-  this.init = function(n){
-    this.type = "New Animal " + n
-  }
-})
+    var Panda = Animal.create(1, function(){
+      this.init = function(){
+        this.type = this.type.replace(/Animal/, "Panda")
+      }
+    })
 
-var Panda = Animal.create(1, function(){
-  this.init = function(){
-    this.type = this.type.replace(/Animal/, "Panda")
-  }
-})
+    var Kiwi = Animal.create(2, function(){
+      this.init = function(){
+        this.type = this.type.replace(/Animal/, "Kiwi")
+      }
+    })
 
-var Kiwi = Animal.create(2, function(){
-  this.init = function(){
-    this.type = this.type.replace(/Animal/, "Kiwi")
-  }
-})
+    var Bob = Panda.create(3)
+    var Lu  = Kiwi.create(4)
 
-var Bob = Panda.create(3)
-var Lu  = Kiwi.create(4)
-
-print(Animal["type"])
-print(Panda["type"])
-print(Kiwi["type"])
-print(Bob["type"])
-print(Lu["type"])
+    print(Animal["type"])
+    print(Panda["type"])
+    print(Kiwi["type"])
+    print(Bob["type"])
+    print(Lu["type"])
+  })()
+}
