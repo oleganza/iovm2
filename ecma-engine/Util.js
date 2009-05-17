@@ -5,8 +5,7 @@ Object.prototype.toString = function() {
     // You cannot use replace() - Opera uses toString() inside replace()
     return (s+"").split('\\').join('\\\\').split('"').join('\\"')
   }
-  for (var k in this) 
-  {
+  for (var k in this){
     if (cont.length) cont[cont.length-1] += ","
     var v = this[k]
     var vs = ''
@@ -46,17 +45,20 @@ var O = {
     var init1 = this.init
     var init2 = obj.init
     
-    if (init2 !== init1 || !init2)
-    {
+    if (init2 !== init1 || !init2) {
       obj.init = function(){
         if (init1) init1.apply(this, arguments)
         if (init2) init2.apply(this, arguments)
       }
     }
-    
     return obj
   },
   init: function(){}
+}
+
+var TODO = function(msg){
+  print("TODO: " + msg)
+  quit()
 }
 
 //
