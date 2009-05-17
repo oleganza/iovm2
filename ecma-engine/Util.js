@@ -74,7 +74,7 @@ var O = {
     return obj
   },
   
-  cloneSetter: function(name) {
+  createSetter: function(name) {
     this["set" + name.substr(0,1).toUpperCase() + name.substr(1)] = function(v) {
       this[name] = v
       return this
@@ -104,7 +104,7 @@ if (!true){
       this.init = function(n){
         this.type = "Animal " + n
       }
-      this.cloneSetter("name")
+      this.createSetter("name")
     })
 
     var Panda = Animal.cloneWithBlock(1, function(){

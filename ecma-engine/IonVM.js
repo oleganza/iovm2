@@ -6,18 +6,18 @@ var VM = (function(){
   
   var lastObjectId = 0
   
-  var SystemType = O.createWithBlock(function(){
+  var SystemType = O.cloneWithBlock(function(){
     this.init = function(name) {
       this.name = name
     }
   })
   
-  var ObjectType  = SystemType.create("Object")
-  var MessageType = SystemType.create("Message")
-  var BuiltinType = SystemType.create("Built-in")
-  var BlockType   = SystemType.create("Block")
+  var ObjectType  = SystemType.clone("Object")
+  var MessageType = SystemType.clone("Message")
+  var BuiltinType = SystemType.clone("Built-in")
+  var BlockType   = SystemType.clone("Block")
 
-  var ObjectProto = O.createWithBlock(function(){
+  var ObjectProto = O.cloneWithBlock(function(){
     this.sysType = ObjectType
     
     this.init = function() {
@@ -45,22 +45,22 @@ var VM = (function(){
     }
   })
   
-  var Nil = ObjectProto.createWithBlock(function(){
-    this.sysType = ObjectType.create("nil")
+  var Nil = ObjectProto.cloneWithBlock(function(){
+    this.sysType = ObjectType.clone("nil")
     this.appendProto(ObjectProto)
   })
   
-  var True = ObjectProto.createWithBlock(function(){
-    this.sysType = ObjectType.create("true")
+  var True = ObjectProto.cloneWithBlock(function(){
+    this.sysType = ObjectType.clone("true")
     this.appendProto(ObjectProto)
   })
   
-  var False = ObjectProto.createWithBlock(function(){
-    this.sysType = ObjectType.create("false")
+  var False = ObjectProto.cloneWithBlock(function(){
+    this.sysType = ObjectType.clone("false")
     this.appendProto(ObjectProto)
   })
   
-  var Builtin = ObjectProto.createWithBlock(function(){
+  var Builtin = ObjectProto.cloneWithBlock(function(){
     this.sysType = BuiltinType
     this.activate = function(state){}
     this.init = function(func){
@@ -69,11 +69,11 @@ var VM = (function(){
   })
   
   ObjectProto.setBuiltin = function(name, func) {
-    setSlot(name, Builtin.create(func))
+    setSlot(name, Builtin.clone(func))
     return this
   }
   
-  var StringProto = ObjectProto.createWithBlock(function(){
+  var StringProto = ObjectProto.cloneWithBlock(function(){
     this.appendProto(ObjectProto)
     this.init = function(){
       this.bytes = ""
@@ -81,14 +81,14 @@ var VM = (function(){
     this.init()
   })
     
-  var Coroutine = O.createWithBlock(function(){
+  var Coroutine = O.cloneWithBlock(function(){
     this.stack = null
     this.state = null
     this.parentCoroutine = null
   })
   
   // TODO: maybe transform this into Locals call
-  var State = O.createWithBlock(function(){
+  var State = O.cloneWithBlock(function(){
     this.message     = null // message to be sent
     this.chainTarget = null // target for a chain of messages (equals to target in the beginning of the chain or after ";")
     this.target      = null // current target for a message
@@ -102,7 +102,7 @@ var VM = (function(){
     }
   })
   
-  var Message = O.createWithBlock(function(){
+  var Message = O.cloneWithBlock(function(){
     this.sysType = MessageType
     this.init = function(){
       this.name         = ""
@@ -118,11 +118,11 @@ var VM = (function(){
     this.createSetter("arguments")
   })
   
-  var SemicolonMessage = Message.createWithBlock(function(){
+  var SemicolonMessage = Message.cloneWithBlock(function(){
     this.name = ";"
   })
   
-  return O.createWithBlock(function(){ // VM
+  return O.cloneWithBlock(function(){ // VM
     var coroutine = null
     var state     = null
     var stack     = null
@@ -224,9 +224,9 @@ var VM = (function(){
     
     this.runMessage = function(message){
       
-      var coro = Coroutine.createWithBlock(function(){
+      var coro = Coroutine.cloneWithBlock(function(){
         this.stack = []
-        this.state = State.create(Nil, message)
+        this.state = State.clone(Nil, message)
       })
 
       this.setCoroutine(coro)
@@ -244,7 +244,7 @@ var VM = (function(){
 //
 
 var verify = function(testName, message) {
-  var vm = VM.create()
+  var vm = VM.clone()
   var result = vm.runMessage(message)
   print(result.sysType.name)
 }
