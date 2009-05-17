@@ -87,7 +87,7 @@ var TODO = function(msg){
 //
 // Test
 //
-if (true){
+if (!true){
   (function(){
     var Animal = O.createWithBlock(function(){
       this.type = "Animal prototype"

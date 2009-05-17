@@ -3,25 +3,32 @@
 load("Util.js")
 
 var VM = (function(){
-
-  var SystemType = O.create(function(){
+  
+  var lastObjectId = 0
+  
+  var SystemType = O.createWithBlock(function(){
+    this.init = function(name) {
+      this.name = name
+    }
   })
   
-  var ObjectType  = SystemType.create()
-  var MessageType = SystemType.create()
-  var BuiltinType = SystemType.create()
-  var BlockType   = SystemType.create()
+  var ObjectType  = SystemType.create("Object")
+  var MessageType = SystemType.create("Message")
+  var BuiltinType = SystemType.create("Built-in")
+  var BlockType   = SystemType.create("Block")
 
-  var ObjectProto = O.create(function(){
-    this.sysType = null
-        
+  var ObjectProto = O.createWithBlock(function(){
+    this.sysType = ObjectType
+    
     this.init = function() {
       this.protos = []
       this.slots  = {}
+      lastObjectId += 1
+      this.objectId = lastObjectId
     }
     
     this.init()
-    
+        
     this.appendProto = function(proto) { 
       this.protos.push(proto)
       return this
@@ -31,41 +38,91 @@ var VM = (function(){
       this.protos.unshift(proto)
       return this
     }
+    
+    this.setSlot = function(name, value) {
+      this.slots[name] = value
+      return this
+    }
   })
   
-  var Nil = ObjectProto.create(function(){
+  var Nil = ObjectProto.createWithBlock(function(){
+    this.sysType = ObjectType.create("nil")
     this.appendProto(ObjectProto)
   })
+  
+  var True = ObjectProto.createWithBlock(function(){
+    this.sysType = ObjectType.create("true")
+    this.appendProto(ObjectProto)
+  })
+  
+  var False = ObjectProto.createWithBlock(function(){
+    this.sysType = ObjectType.create("false")
+    this.appendProto(ObjectProto)
+  })
+  
+  var Builtin = ObjectProto.createWithBlock(function(){
+    this.sysType = BuiltinType
+    this.activate = function(state){}
+    this.init = function(func){
+      this.activate = func
+    }
+  })
+  
+  ObjectProto.setBuiltin = function(name, func) {
+    setSlot(name, Builtin.create(func))
+    return this
+  }
+  
+  var StringProto = ObjectProto.createWithBlock(function(){
+    this.appendProto(ObjectProto)
+    this.init = function(){
+      this.bytes = ""
+    }
+    this.init()
+  })
     
-  var Coroutine = O.create(function(){
+  var Coroutine = O.createWithBlock(function(){
     this.stack = null
     this.state = null
     this.parentCoroutine = null
   })
   
-  var State = O.create(function(){
+  // TODO: maybe transform this into Locals call
+  var State = O.createWithBlock(function(){
     this.message     = null // message to be sent
     this.chainTarget = null // target for a chain of messages (equals to target in the beginning of the chain or after ";")
     this.target      = null // current target for a message
     this.locals      = null // "call context" - object who sent a message to the "target"
     this.slotValue   = null // current slot value (set by lookupSlot)
     this.slotContext = null // object, where last slot is located
+    
+    this.init = function(target, message) {
+      this.target = this.chainTarget = this.locals = target
+      this.message = message
+    }
   })
   
-  var Message = O.create(function(){
+  var Message = O.createWithBlock(function(){
+    this.sysType = MessageType
     this.init = function(){
       this.name         = ""
       this.cachedResult = null // null equals no cached result, but Nil is a valid cached result!
       this.next         = Nil
+      this.previous     = Nil
       this.arguments    = []
     }
+    this.createSetter("name")
+    this.createSetter("cachedResult")
+    this.createSetter("next")
+    this.createSetter("previous")
+    this.createSetter("arguments")
   })
   
-  var SemicolonMessage = Message.create(function(){
+  var SemicolonMessage = Message.createWithBlock(function(){
     this.name = ";"
   })
   
-  var VM = O.create(function(){
+  return O.createWithBlock(function(){ // VM
     var coroutine = null
     var state     = null
     var stack     = null
@@ -76,7 +133,7 @@ var VM = (function(){
       stack     = coro.stack
     }
     
-    var lookupSlot = function(name, target, state) {
+    var lookupSlot = function(name, target, state /* = null */) {
       TODO("Slot lookup for " + name + " and return the value")
     }
     
@@ -92,6 +149,15 @@ var VM = (function(){
       return(value.sysType == BlockType)
     }
     
+    var objectName = function(object) {
+      var type = lookupSlot("type", object, null)
+      return type || object.sysType.name
+    }
+    
+    var activateMethod = function(method) {
+      TODO("Activate method in context")
+    }
+    
     var run = function(){
       if (!coroutine) throw "Coroutine is required"
       if (!state)     throw "Coroutine state is required"
@@ -104,12 +170,10 @@ var VM = (function(){
           var poppedState = stack.pop()
           if (poppedState) { // we have a method to return to
             state = poppedState
-            continue
           } else { // stack is empty: switch to parent coroutine
             var parentCoroutine = coroutine.parentCoroutine
             if (parentCoroutine) {
               setCoroutine(parentCoroutine)
-              continue
             } else { // no parent coroutine - exit
               break
             }
@@ -118,12 +182,10 @@ var VM = (function(){
           
           state.target  = state.message.cachedResult
           state.message = state.message.next
-          continue
           
         } else if (message.name === ";") {
           
           state.target = state.chainTarget
-          continue
           
         } else {
           var self = state.target
@@ -133,15 +195,14 @@ var VM = (function(){
           
           if (!slotValue) {
             raiseException("'" + objectName(self) + "' does not respond to message '" +  + "'", state)
-            continue
           } else {
             
             if (isBuiltin(slotValue)) {
               slotValue.activate(state)
             } else if (isMethod(slotValue)) {
-              
+              activateMethod(slotValue)
             } else {
-              
+              raiseException("Slot '" + slotName + "' in object '" + objectName(self) + "' is not activatable!")
             }
           }
           
@@ -155,14 +216,26 @@ var VM = (function(){
     
     this.setCoroutine = setCoroutine
     this.run          = run
+
+    this.Coroutine = Coroutine
+    this.State     = State
+    this.Message   = Message
+    this.Nil       = Nil
+    
+    this.runMessage = function(message){
+      
+      var coro = Coroutine.createWithBlock(function(){
+        this.stack = []
+        this.state = State.create(Nil, message)
+      })
+
+      this.setCoroutine(coro)
+      this.run()
+      
+      return state.target
+    }
     
   }) // VM
-  
-  VM.Coroutine = Coroutine
-  VM.State     = State
-  VM.Message   = Message
-  
-  return VM
 })()
 
 
@@ -170,23 +243,10 @@ var VM = (function(){
 // Test
 //
 
-var vm = VM.create()
+var verify = function(testName, message) {
+  var vm = VM.create()
+  var result = vm.runMessage(message)
+  print(result.sysType.name)
+}
 
-var state = vm.State.create(function(){
-  this.message = msg
-  
-})
-
-var coro = vm.Coroutine.create(function(){
-  this.stack = []
-  this.state = state
-})
-
-vm.setCoroutine(coro)
-vm.run()
-
-//var Message = IoVM.Message
-//IoVM.create
-
-//print(Array.prototype.slice.call(arguments))
-//print(arguments)
+verify("test nil message", VM.Nil)
