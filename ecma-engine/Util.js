@@ -30,17 +30,31 @@ Object.prototype.toString = function() {
   return s
 }
 
+
+// The Y Combinator
+var Y = function (gen) {
+  return (function(f) {return f(f)})(
+    function(f) {
+      return gen(function() {return f(f).apply(null, arguments)})
+    }
+  )
+}
+
+// Base object for OOP with inheritance
 var O = {
   create: function() {
     var C = function(){}
     C.prototype = this
     var obj = new C()
+    obj.init.apply(obj, arguments)
+    return obj
+  },
+  createWithBlock: function() {
+    var args = Array.prototype.slice.apply(arguments)
+    var block = args.pop()
+    var obj = this.create.apply(this, args)
     
-    if (obj["init"]) obj.init.apply(obj, arguments)
-    
-    if (arguments.length < 1) return obj
-    var last = arguments[arguments.length - 1]
-    if (typeof(last) === "function") last.apply(obj, arguments)
+    block.apply(obj, args)
     
     var init1 = this.init
     var init2 = obj.init
@@ -53,6 +67,15 @@ var O = {
     }
     return obj
   },
+  
+  createSetter: function(name) {
+    this["set" + name.substr(0,1).toUpperCase() + name.substr(1)] = function(v) {
+      this[name] = v
+      return this
+    }
+    return this
+  },
+  
   init: function(){}
 }
 
@@ -64,34 +87,37 @@ var TODO = function(msg){
 //
 // Test
 //
-if (false){
+if (true){
   (function(){
-    var Animal = O.create(function(){
+    var Animal = O.createWithBlock(function(){
       this.type = "Animal prototype"
       this.init = function(n){
-        this.type = "New Animal " + n
+        this.type = "Animal " + n
       }
+      this.createSetter("name")
     })
 
-    var Panda = Animal.create(1, function(){
+    var Panda = Animal.createWithBlock(1, function(){
       this.init = function(){
         this.type = this.type.replace(/Animal/, "Panda")
       }
     })
 
-    var Kiwi = Animal.create(2, function(){
+    var Kiwi = Animal.createWithBlock(2, function(){
       this.init = function(){
         this.type = this.type.replace(/Animal/, "Kiwi")
       }
     })
 
-    var Bob = Panda.create(3)
-    var Lu  = Kiwi.create(4)
+    var Bob = Panda.create(3).setName("Bob")
+    var Lu  = Kiwi.create(4).setName("Lu")
 
-    print(Animal["type"])
-    print(Panda["type"])
-    print(Kiwi["type"])
-    print(Bob["type"])
-    print(Lu["type"])
+    print(Animal["type"] == "Animal prototype")
+    print(Panda["type"] == "Animal 1")
+    print(Kiwi["type"] == "Animal 2")
+    print(Bob["type"] == "Panda 3")
+    print(Lu["type"] == "Kiwi 4")
+    print(Bob.name == "Bob")
+    print(Lu.name == "Lu")
   })()
 }
