@@ -48,11 +48,17 @@ var VM = (function(){
     this.chainTarget = null // target for a chain of messages (equals to target in the beginning of the chain or after ";")
     this.target      = null // current target for a message
     this.locals      = null // "call context" - object who sent a message to the "target"
-    this.value       = null // current slot value (set by lookupSlot)
+    this.slotValue   = null // current slot value (set by lookupSlot)
+    this.slotContext = null // object, where last slot is located
   })
   
   var Message = O.create(function(){
-    this.cachedResult = null // Nil is valid cached result!
+    this.init = function(){
+      this.name         = ""
+      this.cachedResult = null // null equals no cached result, but Nil is a valid cached result!
+      this.next         = Nil
+      this.arguments    = []
+    }
   })
   
   var SemicolonMessage = Message.create(function(){
@@ -64,29 +70,93 @@ var VM = (function(){
     var state     = null
     var stack     = null
     
-    this.setCoroutine = function(coro){
+    var setCoroutine = function(coro){
       coroutine = coro
       state     = coro.state
       stack     = coro.stack
     }
     
-    this.run = function(){
+    var lookupSlot = function(name, target, state) {
+      TODO("Slot lookup for " + name + " and return the value")
+    }
+    
+    var raiseException = function(msg, state) {
+      TODO("Raise proper exception with message: " + msg)
+    }
+    
+    var isBuiltin = function(value) {
+      return(value.sysType == BuiltinType)
+    }
+    
+    var isMethod = function(value) {
+      return(value.sysType == BlockType)
+    }
+    
+    var run = function(){
       if (!coroutine) throw "Coroutine is required"
       if (!state)     throw "Coroutine state is required"
       if (!stack)     throw "Coroutine stack is required"
       
       while (true) {
         // main loop till coroutine returns
-        if (state.message == Nil) {
-          var storedState = stack.pop()
-        } else if (state.message == SemicolonMessage) {
+        var message = state.message
+        if (message === Nil) {
+          var poppedState = stack.pop()
+          if (poppedState) { // we have a method to return to
+            state = poppedState
+            continue
+          } else { // stack is empty: switch to parent coroutine
+            var parentCoroutine = coroutine.parentCoroutine
+            if (parentCoroutine) {
+              setCoroutine(parentCoroutine)
+              continue
+            } else { // no parent coroutine - exit
+              break
+            }
+          } // if (poppedState)
+        } else if (message.cachedResult) {
           
-        } else if (state.message.cachedResult) {
+          state.target  = state.message.cachedResult
+          state.message = state.message.next
+          continue
           
-        }
-      }
-    }
-  })
+        } else if (message.name === ";") {
+          
+          state.target = state.chainTarget
+          continue
+          
+        } else {
+          var self = state.target
+          var slotName = message.name
+          var slotValue = lookupSlot(slotName,  self, state) ||
+                          lookupSlot("forward", self, state)
+          
+          if (!slotValue) {
+            raiseException("'" + objectName(self) + "' does not respond to message '" +  + "'", state)
+            continue
+          } else {
+            
+            if (isBuiltin(slotValue)) {
+              slotValue.activate(state)
+            } else if (isMethod(slotValue)) {
+              
+            } else {
+              
+            }
+          }
+          
+        } // message type switch
+      } // while(true)
+    } // run
+    
+    //
+    // Public API
+    //
+    
+    this.setCoroutine = setCoroutine
+    this.run          = run
+    
+  }) // VM
   
   VM.Coroutine = Coroutine
   VM.State     = State
@@ -112,7 +182,7 @@ var coro = vm.Coroutine.create(function(){
   this.state = state
 })
 
-vm.setCoro(coro)
+vm.setCoroutine(coro)
 vm.run()
 
 //var Message = IoVM.Message
