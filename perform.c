@@ -111,6 +111,42 @@ IOINLINE IO_METHOD(IoObject, perform)
 
 
 
+IOINLINE IoObject *IoObject_rawGetSlot_(IoObject *self, IoSymbol *slotName)
+{
+	register IoObject *v = (IoObject *)NULL;
+
+	if (IoObject_ownsSlots(self))
+	{
+		v = (IoObject *)PHash_at_(IoObject_slots(self), slotName);
+
+		if (v) return v;
+	}
+
+	IoObject_hasDoneLookup_(self, 1);
+
+	{
+		register IoObject **protos = IoObject_protos(self);
+
+		for (; *protos; protos ++)
+		{
+			if (IoObject_hasDoneLookup((*protos)))
+			{
+				continue;
+			}
+
+			v = IoObject_rawGetSlot_(*protos, slotName);
+
+			if (v) break;
+		}
+	}
+
+	IoObject_hasDoneLookup_(self, 0);
+
+	return v;
+}
+
+
+
 
 IoObject *IoBlock_activate(IoBlock *self, IoObject *target, IoObject *locals, IoMessage *m, IoObject *slotContext)
 {
