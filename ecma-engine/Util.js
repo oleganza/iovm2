@@ -31,6 +31,8 @@ Object.prototype.toString = function() {
 }
 
 
+
+
 // The Y Combinator
 var Y = function (gen) {
   return (function(f) {return f(f)})(
@@ -40,19 +42,23 @@ var Y = function (gen) {
   )
 }
 
+
+
+
 // Base object for OOP with inheritance
 var O = {
-  create: function() {
+  clone: function() {
     var C = function(){}
     C.prototype = this
     var obj = new C()
     obj.init.apply(obj, arguments)
     return obj
   },
-  createWithBlock: function() {
+  
+  cloneWithBlock: function() {
     var args = Array.prototype.slice.apply(arguments)
     var block = args.pop()
-    var obj = this.create.apply(this, args)
+    var obj = this.clone.apply(this, args)
     
     block.apply(obj, args)
     
@@ -68,7 +74,7 @@ var O = {
     return obj
   },
   
-  createSetter: function(name) {
+  cloneSetter: function(name) {
     this["set" + name.substr(0,1).toUpperCase() + name.substr(1)] = function(v) {
       this[name] = v
       return this
@@ -79,38 +85,42 @@ var O = {
   init: function(){}
 }
 
+
+
+
 var TODO = function(msg){
   print("TODO: " + msg)
   quit()
 }
+
 
 //
 // Test
 //
 if (!true){
   (function(){
-    var Animal = O.createWithBlock(function(){
+    var Animal = O.cloneWithBlock(function(){
       this.type = "Animal prototype"
       this.init = function(n){
         this.type = "Animal " + n
       }
-      this.createSetter("name")
+      this.cloneSetter("name")
     })
 
-    var Panda = Animal.createWithBlock(1, function(){
+    var Panda = Animal.cloneWithBlock(1, function(){
       this.init = function(){
         this.type = this.type.replace(/Animal/, "Panda")
       }
     })
 
-    var Kiwi = Animal.createWithBlock(2, function(){
+    var Kiwi = Animal.cloneWithBlock(2, function(){
       this.init = function(){
         this.type = this.type.replace(/Animal/, "Kiwi")
       }
     })
 
-    var Bob = Panda.create(3).setName("Bob")
-    var Lu  = Kiwi.create(4).setName("Lu")
+    var Bob = Panda.clone(3).setName("Bob")
+    var Lu  = Kiwi.clone(4).setName("Lu")
 
     print(Animal["type"] == "Animal prototype")
     print(Panda["type"] == "Animal 1")
