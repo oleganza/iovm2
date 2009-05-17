@@ -111,7 +111,9 @@ IOINLINE IO_METHOD(IoObject, perform)
 
 
 
-IOINLINE IoObject *IoObject_rawGetSlot_(IoObject *self, IoSymbol *slotName)
+IOINLINE IoObject *IoObject_rawGetSlot_context_(IoObject *self,
+												IoSymbol *slotName,
+												IoObject **context)
 {
 	register IoObject *v = (IoObject *)NULL;
 
@@ -119,7 +121,11 @@ IOINLINE IoObject *IoObject_rawGetSlot_(IoObject *self, IoSymbol *slotName)
 	{
 		v = (IoObject *)PHash_at_(IoObject_slots(self), slotName);
 
-		if (v) return v;
+		if (v)
+		{
+			*context = self;
+			return v;
+		}
 	}
 
 	IoObject_hasDoneLookup_(self, 1);
@@ -134,9 +140,12 @@ IOINLINE IoObject *IoObject_rawGetSlot_(IoObject *self, IoSymbol *slotName)
 				continue;
 			}
 
-			v = IoObject_rawGetSlot_(*protos, slotName);
+			v = IoObject_rawGetSlot_context_(*protos, slotName, context);
 
-			if (v) break;
+			if (v)
+			{
+				break;
+			}
 		}
 	}
 
