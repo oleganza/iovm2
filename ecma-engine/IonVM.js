@@ -7,19 +7,40 @@ var VM = (function(){
   var SystemType = O.create(function(){
   })
   
+  var ObjectType  = SystemType.create()
   var MessageType = SystemType.create()
   var BuiltinType = SystemType.create()
   var BlockType   = SystemType.create()
 
   var ObjectProto = O.create(function(){
     this.sysType = null
-    this.protos  = []
-    this.slots   = {}
+        
+    this.init = function() {
+      this.protos = []
+      this.slots  = {}
+    }
+    
+    this.init()
+    
+    this.appendProto = function(proto) { 
+      this.protos.push(proto)
+      return this
+    }
+    
+    this.prependProto = function(proto) { 
+      this.protos.unshift(proto)
+      return this
+    }
+  })
+  
+  var Nil = ObjectProto.create(function(){
+    this.appendProto(ObjectProto)
   })
     
   var Coroutine = O.create(function(){
     this.stack = null
     this.state = null
+    this.parentCoroutine = null
   })
   
   var State = O.create(function(){
@@ -31,7 +52,11 @@ var VM = (function(){
   })
   
   var Message = O.create(function(){
-    
+    this.cachedResult = null // Nil is valid cached result!
+  })
+  
+  var SemicolonMessage = Message.create(function(){
+    this.name = ";"
   })
   
   var VM = O.create(function(){
@@ -47,13 +72,18 @@ var VM = (function(){
     
     this.run = function(){
       if (!coroutine) throw "Coroutine is required"
-      if (!state) throw "Coroutine state is required"
-      if (!stack) throw "Coroutine stack is required"
+      if (!state)     throw "Coroutine state is required"
+      if (!stack)     throw "Coroutine stack is required"
       
       while (true) {
         // main loop till coroutine returns
-        
-        if (state.message == null)
+        if (state.message == Nil) {
+          var storedState = stack.pop()
+        } else if (state.message == SemicolonMessage) {
+          
+        } else if (state.message.cachedResult) {
+          
+        }
       }
     }
   })
