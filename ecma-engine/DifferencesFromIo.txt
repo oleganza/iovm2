@@ -1,0 +1,23 @@
+
+Syntax
+
+- Square brackets instead of parentheses to save some keystrokes on shift button.
+- Every slot is activated on direct access. Non-activatable slot access raises exception.
+- 'x := y' creates getter (block[getSlot["_x"]]) and setter (block[v, setSlot["_x", v]; v]).
+- 'x = y' is parsed as 'x=[y]' (i.e. message 'x=' with argument 'y').
+- Ion does not have ::= operator.
+
+Core API
+
+- Object proto != Lobby.
+- Flow control is based on 'branch' and 'loop' built-in methods only. Every conditional statement uses 'cond toBoolean' call. This enables correct futures implementation.
+- objectId instead uniqueId.
+- 'clone'    creates a differentially inherited object (with target as a proto).
+- 'copy'     creates a copy of the object (slots and protos are copied to the new object).
+- 'deepCopy' creates a deep copy of the object graph (depends on particular proto implementation).
+- ImmutableSequence, String and Text protos.
+
+Core sugar API 
+
+- 'def methodName[args, body]' macro for setSlot["methodName", args, body]
+- method name may end with ? or ! 

@@ -21,6 +21,7 @@ var VM = (function(){
     this.sysType = ObjectType
     
     this.init = function() {
+      this.hasDoneSlotLookup = false // used for preventing infinite loop in recursive slot lookup
       this.protos = []
       this.slots  = {}
       lastObjectId += 1
@@ -28,13 +29,13 @@ var VM = (function(){
     }
     
     this.init()
-        
-    this.appendProto = function(proto) { 
+    
+    this.appendProto = function(proto) {
       this.protos.push(proto)
       return this
     }
     
-    this.prependProto = function(proto) { 
+    this.prependProto = function(proto) {
       this.protos.unshift(proto)
       return this
     }
@@ -68,6 +69,19 @@ var VM = (function(){
     }
   })
   
+  // Block does not deal with call arguments.
+  // Notation block[x,x+1] is transformed in pure Ion to block[x := call arguments first]
+  var Block = ObjectProto.cloneWithBlock(function(){
+    this.sysType = BlockType
+    this.message = Nil
+    this.init = function(message){
+      this.message = message
+      this.scope = arguments[1] || Nil
+    }
+    createSetter("message")
+    createSetter("scope")
+  })
+  
   ObjectProto.setBuiltin = function(name, func) {
     setSlot(name, Builtin.clone(func))
     return this
@@ -87,7 +101,7 @@ var VM = (function(){
     this.parentCoroutine = null
   })
   
-  // TODO: maybe transform this into Locals call
+  // TODO: maybe transform this into direct 'Locals call' object? (immutable?)
   var State = O.cloneWithBlock(function(){
     this.message     = null // message to be sent
     this.chainTarget = null // target for a chain of messages (equals to target in the beginning of the chain or after ";")
@@ -133,8 +147,22 @@ var VM = (function(){
       stack     = coro.stack
     }
     
-    var lookupSlot = function(name, target, state /* = null */) {
-      TODO("Slot lookup for " + name + " and return the value")
+    var lookupSlot = function(name, target, /* state = null */) {
+      var state = arguments[2]
+      var value = target.slots[name]
+      
+      if (value) {
+        if (state) state.slotContext = target
+      } else {
+        target.hasDoneSlotLookup = true // prevent infinite loop
+      	for each (var proto in target.protos) {
+    			if (proto.hasDoneSlotLookup) continue
+    			value = lookupSlot(name, proto, state)
+    			if (value) break
+      	}
+      	target.hasDoneSlotLookup = false
+      }
+      return value
     }
     
     var raiseException = function(msg, state) {
@@ -142,11 +170,11 @@ var VM = (function(){
     }
     
     var isBuiltin = function(value) {
-      return(value.sysType == BuiltinType)
+      return(value.sysType === BuiltinType)
     }
     
     var isMethod = function(value) {
-      return(value.sysType == BlockType)
+      return(value.sysType === BlockType)
     }
     
     var objectName = function(object) {

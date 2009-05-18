@@ -1,6 +1,15 @@
-
-- Test JSBNF parser with JSON grammar
-- Io grammar in JSBNF
+- Ion VM
+  - slot lookup
+  - method activation
+  - exceptions
+  - strings
+  - numbers
+  - lists
+  - simple built-in methods
+  - "branch" built-in
+  - "loop" built-in (support "break" and "continue" coroutine exit statuses)
+  
+- Ion grammar in JSBNF
 - Interpreter within AS3
   - class access
   - object creation
@@ -8,3 +17,7 @@
   - method invocation
 - Bytecode tracer & optimizer
 
+
+DONE
+
+- Test JSBNF parser with JSON grammar
