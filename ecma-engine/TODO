@@ -15,7 +15,12 @@
   - object creation
   - property access
   - method invocation
+- CSS building DSL
+  - rules could be separate from selectors
+  - multiple inheritance for rules
+  - variables
 - Bytecode tracer & optimizer
+
 
 
 DONE
