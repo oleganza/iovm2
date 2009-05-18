@@ -78,15 +78,15 @@ var VM = (function(){
       this.message = message
       this.scope = arguments[1] || Nil
     }
-    createSetter("message")
-    createSetter("scope")
+    this.createSetter("message")
+    this.createSetter("scope")
   })
   
   ObjectProto.setBuiltin = function(name, func) {
-    setSlot(name, Builtin.clone(func))
+    this.setSlot(name, Builtin.clone(func))
     return this
   }
-  
+    
   var StringProto = ObjectProto.cloneWithBlock(function(){
     this.appendProto(ObjectProto)
     this.init = function(){
@@ -94,26 +94,44 @@ var VM = (function(){
     }
     this.init()
   })
-    
+  
+  var StopStatusNormal   = 0
+  var StopStatusBreak    = 1
+  var StopStatusContinue = 2
+  var StopStatusReturn   = 3
+  var StopStatusRaise    = 4
+  
   var Coroutine = O.cloneWithBlock(function(){
     this.stack = null
     this.state = null
     this.parentCoroutine = null
+    this.returnStatus 
   })
   
-  // TODO: maybe transform this into direct 'Locals call' object? (immutable?)
-  var State = O.cloneWithBlock(function(){
+  // TODO: maybe transform this into direct 'Locals call' object? (immutable or lazily created?)
+  var State = ObjectProto.cloneWithBlock(function(){
     this.message     = null // message to be sent
     this.chainTarget = null // target for a chain of messages (equals to target in the beginning of the chain or after ";")
     this.target      = null // current target for a message
     this.locals      = null // "call context" - object who sent a message to the "target"
     this.slotValue   = null // current slot value (set by lookupSlot)
     this.slotContext = null // object, where last slot is located
+    this.sender      = null // != null only in call context
     
     this.init = function(target, message) {
       this.target = this.chainTarget = this.locals = target
       this.message = message
     }
+    
+    var self = this
+    var setReturningBuiltin = function(nativeName, slotName) {
+      self.setBuiltin(slotName, function(s){ s.target = s.target[nativeName] })
+    }
+    setReturningBuiltin("message",     "message")
+    setReturningBuiltin("target",      "target")
+    setReturningBuiltin("locals",      "sender") // note: sender will be the locals register upon the call
+    setReturningBuiltin("slotValue",   "slotValue")
+    setReturningBuiltin("slotContext", "slotContext")
   })
   
   var Message = O.cloneWithBlock(function(){
@@ -147,7 +165,7 @@ var VM = (function(){
       stack     = coro.stack
     }
     
-    var lookupSlot = function(name, target, /* state = null */) {
+    var lookupSlot = function(name, target /*, state = null */) {
       var state = arguments[2]
       var value = target.slots[name]
       
@@ -183,6 +201,8 @@ var VM = (function(){
     }
     
     var activateMethod = function(method) {
+      var call = state
+      
       TODO("Activate method in context")
     }
     
@@ -195,6 +215,7 @@ var VM = (function(){
         // main loop till coroutine returns
         var message = state.message
         if (message === Nil) {
+          
           var poppedState = stack.pop()
           if (poppedState) { // we have a method to return to
             state = poppedState
@@ -206,6 +227,7 @@ var VM = (function(){
               break
             }
           } // if (poppedState)
+          
         } else if (message.cachedResult) {
           
           state.target  = state.message.cachedResult
@@ -228,6 +250,7 @@ var VM = (function(){
             if (isBuiltin(slotValue)) {
               slotValue.activate(state)
             } else if (isMethod(slotValue)) {
+              state.slotValue = slotValue
               activateMethod(slotValue)
             } else {
               raiseException("Slot '" + slotName + "' in object '" + objectName(self) + "' is not activatable!")
@@ -271,10 +294,13 @@ var VM = (function(){
 // Test
 //
 
-var verify = function(testName, message) {
-  var vm = VM.clone()
-  var result = vm.runMessage(message)
-  print(result.sysType.name)
-}
+if (true) {
+  var verify = function(testName, message) {
+    var vm = VM.clone()
+    var result = vm.runMessage(message)
+    print(result.sysType.name)
+  }
 
-verify("test nil message", VM.Nil)
+  verify("test nil message", VM.Nil)
+  //verify("test nil message", VM.Message.clone().setCachedResult(VM.))
+}

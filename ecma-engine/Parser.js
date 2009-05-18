@@ -6,7 +6,6 @@ var Parser = function(grammar)
     return arr
   }
   
-  
   // The Y Combinator
   var Y = function (gen) {
     return (function(f) {return f(f)})(

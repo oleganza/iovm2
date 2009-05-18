@@ -1,5 +1,4 @@
 - Ion VM
-  - slot lookup
   - method activation
   - exceptions
   - strings
@@ -26,3 +25,5 @@
 DONE
 
 - Test JSBNF parser with JSON grammar
+- slot lookup
+

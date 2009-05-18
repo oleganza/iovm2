@@ -15,9 +15,14 @@ Core API
 - 'clone'    creates a differentially inherited object (with target as a proto).
 - 'copy'     creates a copy of the object (slots and protos are copied to the new object).
 - 'deepCopy' creates a deep copy of the object graph (depends on particular proto implementation).
-- ImmutableSequence, String and Text protos.
-
-Core sugar API 
+- Byte arrays are implemented using String proto. String has encoding-agnostic API. String may be either mutable or immutable. In the latter case all methods with side effects raise an exception upon call. One can change encoding of the string in different ways:
+  - string encoding = UTF8     # changes the encoding and performs validation; in case of failure, reverts to the original encoding and raises exception
+  - string setEncoding(UTF8)   # same as above, but returns self
+  - string copy(UTF8)          # same as above, but returns mutable copy of the original data
+  - string immutableCopy(UTF8) # same as above, but returns immutable copy of the original data
+  Note: copy and immutableCopy can be called without argument. In such case, current encoding is used.
+  
+Core sugar API
 
 - 'def methodName[args, body]' macro for setSlot["methodName", args, body]
 - method name may end with ? or ! 
