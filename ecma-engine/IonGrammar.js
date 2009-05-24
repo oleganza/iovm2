@@ -28,11 +28,15 @@ var IonGrammar = function(All, Any, Capture, Char, NotChar, Optional, Y, EOF, Te
   
   return Y(function(MessageChain){
     
+    var idPrefix = Char("_qwertyuiopasdfghjklzxcvbnm$")
+    var idRest   = Char("")
+    var id = All(idPrefix, Optional(Plus())) // a1, _a1, a1?, a1!, a1=
+    
     var assignment = All()
     
     var solo = Any(assignment, call)
     var tail = Any(statementTail, nextMessageTail)
     return Any(All(solo, tail), solo)
   })
-    
+
 }

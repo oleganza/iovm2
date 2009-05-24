@@ -1,8 +1,6 @@
-#!/usr/bin/env js
-
 load("Util.js")
 
-var VM = (function(){
+var IonVM = (function(){
   
   var lastObjectId = 0
   
@@ -289,18 +287,3 @@ var VM = (function(){
   }) // VM
 })()
 
-
-//
-// Test
-//
-
-if (true) {
-  var verify = function(testName, message) {
-    var vm = VM.clone()
-    var result = vm.runMessage(message)
-    print(result.sysType.name)
-  }
-
-  verify("test nil message", VM.Nil)
-  //verify("test nil message", VM.Message.clone().setCachedResult(VM.))
-}
